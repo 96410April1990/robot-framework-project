@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.0.2 (Python 3.11.8 on darwin)" generated="20260204 15:50:44.914" rpa="false" schemaversion="3">
+<suite id="s1" name="SimpleFailureExample" source="/Users/r0n01gu/Documents/QA-Automation-Repo/DSAR-CANADA-E2E-Automation/AI-Self-Healing-Tests/SimpleFailureExample.robot">
+<test id="s1-t1" name="Test Case 1: Successful Login" line="12">
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>https://the-internet.herokuapp.com/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20260204 15:50:45.649" level="INFO">Opening browser 'chrome' to base url 'https://the-internet.herokuapp.com/login'.</msg>
+<msg timestamp="20260204 15:51:09.648" level="WARN">Exception managing chrome: error sending request for url (https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json): error trying to connect: Operation timed out (os error 60)</msg>
+<status status="PASS" starttime="20260204 15:50:45.649" endtime="20260204 15:51:15.071"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>id:username</arg>
+<arg>timeout=${TIMEOUT}</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20260204 15:51:15.071" endtime="20260204 15:51:15.083"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id:username</arg>
+<arg>tomsmith</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260204 15:51:15.083" level="INFO">Typing text 'tomsmith' into text field 'id:username'.</msg>
+<status status="PASS" starttime="20260204 15:51:15.083" endtime="20260204 15:51:15.191"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id:password</arg>
+<arg>SuperSecretPassword!</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260204 15:51:15.192" level="INFO">Typing text 'SuperSecretPassword!' into text field 'id:password'.</msg>
+<status status="PASS" starttime="20260204 15:51:15.192" endtime="20260204 15:51:15.241"/>
+</kw>
+<kw name="Click Button" library="SeleniumLibrary">
+<arg>css:.fa-sign-in</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<msg timestamp="20260204 15:51:15.241" level="INFO">Clicking button 'css:.fa-sign-in'.</msg>
+<msg timestamp="20260204 15:51:15.480" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20260204 15:51:15.480" level="FAIL">Button with locator 'css:.fa-sign-in' not found.</msg>
+<status status="FAIL" starttime="20260204 15:51:15.241" endtime="20260204 15:51:15.514"/>
+</kw>
+<kw name="Wait Until Page Contains" library="SeleniumLibrary">
+<arg>You logged into a secure area!</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" starttime="20260204 15:51:15.515" endtime="20260204 15:51:15.515"/>
+</kw>
+<kw name="Close Browser" library="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20260204 15:51:15.515" endtime="20260204 15:51:15.630"/>
+</kw>
+<doc>This test should PASS - demonstrates successful scenario</doc>
+<status status="FAIL" starttime="20260204 15:50:45.648" endtime="20260204 15:51:15.631">Button with locator 'css:.fa-sign-in' not found.</status>
+</test>
+<test id="s1-t2" name="Test Case 2: Wrong Selector Failure" line="22">
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>https://the-internet.herokuapp.com/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20260204 15:51:15.631" level="INFO">Opening browser 'chrome' to base url 'https://the-internet.herokuapp.com/login'.</msg>
+<msg timestamp="20260204 15:51:37.279" level="WARN">Exception managing chrome: error sending request for url (https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json): error trying to connect: Operation timed out (os error 60)</msg>
+<status status="PASS" starttime="20260204 15:51:15.631" endtime="20260204 15:51:42.150"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>id:username</arg>
+<arg>timeout=${TIMEOUT}</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20260204 15:51:42.150" endtime="20260204 15:51:42.156"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id:username</arg>
+<arg>tomsmith</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260204 15:51:42.157" level="INFO">Typing text 'tomsmith' into text field 'id:username'.</msg>
+<status status="PASS" starttime="20260204 15:51:42.156" endtime="20260204 15:51:42.236"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id:wrong_password_id</arg>
+<arg>SuperSecretPassword!</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260204 15:51:42.236" level="INFO">Typing text 'SuperSecretPassword!' into text field 'id:wrong_password_id'.</msg>
+<msg timestamp="20260204 15:51:42.337" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-2.png"&gt;&lt;img src="selenium-screenshot-2.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20260204 15:51:42.338" level="FAIL">Element with locator 'id:wrong_password_id' not found.</msg>
+<status status="FAIL" starttime="20260204 15:51:42.236" endtime="20260204 15:51:42.347"/>
+</kw>
+<kw name="Click Button" library="SeleniumLibrary">
+<arg>css:.fa-sign-in</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="NOT RUN" starttime="20260204 15:51:42.347" endtime="20260204 15:51:42.347"/>
+</kw>
+<kw name="Close Browser" library="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20260204 15:51:42.348" endtime="20260204 15:51:42.456"/>
+</kw>
+<doc>This test should FAIL - wrong element selector</doc>
+<status status="FAIL" starttime="20260204 15:51:15.631" endtime="20260204 15:51:42.456">Element with locator 'id:wrong_password_id' not found.</status>
+</test>
+<test id="s1-t3" name="Test Case 3: Timeout Failure" line="31">
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>https://the-internet.herokuapp.com/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20260204 15:51:42.456" level="INFO">Opening browser 'chrome' to base url 'https://the-internet.herokuapp.com/login'.</msg>
+<msg timestamp="20260204 15:52:04.128" level="WARN">Exception managing chrome: error sending request for url (https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json): error trying to connect: Operation timed out (os error 60)</msg>
+<status status="PASS" starttime="20260204 15:51:42.456" endtime="20260204 15:52:09.049"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>id:nonexistent_element</arg>
+<arg>timeout=5s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<msg timestamp="20260204 15:52:14.260" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-3.png"&gt;&lt;img src="selenium-screenshot-3.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20260204 15:52:14.260" level="FAIL">Element 'id:nonexistent_element' did not appear in 5 seconds.</msg>
+<status status="FAIL" starttime="20260204 15:52:09.050" endtime="20260204 15:52:14.276"/>
+</kw>
+<kw name="Close Browser" library="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20260204 15:52:14.276" endtime="20260204 15:52:14.401"/>
+</kw>
+<doc>This test should FAIL - element doesn't exist, will timeout</doc>
+<status status="FAIL" starttime="20260204 15:51:42.456" endtime="20260204 15:52:14.401">Element 'id:nonexistent_element' did not appear in 5 seconds.</status>
+</test>
+<test id="s1-t4" name="Test Case 4: Assertion Failure" line="37">
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>https://the-internet.herokuapp.com/login</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20260204 15:52:14.402" level="INFO">Opening browser 'chrome' to base url 'https://the-internet.herokuapp.com/login'.</msg>
+<msg timestamp="20260204 15:52:36.051" level="WARN">Exception managing chrome: error sending request for url (https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json): error trying to connect: Operation timed out (os error 60)</msg>
+<status status="PASS" starttime="20260204 15:52:14.402" endtime="20260204 15:52:41.067"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>id:username</arg>
+<arg>timeout=${TIMEOUT}</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20260204 15:52:41.068" endtime="20260204 15:52:41.083"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id:username</arg>
+<arg>wronguser</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260204 15:52:41.084" level="INFO">Typing text 'wronguser' into text field 'id:username'.</msg>
+<status status="PASS" starttime="20260204 15:52:41.084" endtime="20260204 15:52:41.184"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id:password</arg>
+<arg>wrongpassword</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20260204 15:52:41.184" level="INFO">Typing text 'wrongpassword' into text field 'id:password'.</msg>
+<status status="PASS" starttime="20260204 15:52:41.184" endtime="20260204 15:52:41.225"/>
+</kw>
+<kw name="Click Button" library="SeleniumLibrary">
+<arg>css:.fa-sign-in</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<msg timestamp="20260204 15:52:41.225" level="INFO">Clicking button 'css:.fa-sign-in'.</msg>
+<msg timestamp="20260204 15:52:41.320" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-4.png"&gt;&lt;img src="selenium-screenshot-4.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20260204 15:52:41.320" level="FAIL">Button with locator 'css:.fa-sign-in' not found.</msg>
+<status status="FAIL" starttime="20260204 15:52:41.225" endtime="20260204 15:52:41.321"/>
+</kw>
+<kw name="Wait Until Page Contains" library="SeleniumLibrary">
+<arg>You logged into a secure area!</arg>
+<doc>Waits until ``text`` appears on the current page.</doc>
+<status status="NOT RUN" starttime="20260204 15:52:41.321" endtime="20260204 15:52:41.321"/>
+</kw>
+<kw name="Close Browser" library="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20260204 15:52:41.321" endtime="20260204 15:52:41.431"/>
+</kw>
+<doc>This test should FAIL - wrong expected text</doc>
+<status status="FAIL" starttime="20260204 15:52:14.402" endtime="20260204 15:52:41.431">Button with locator 'css:.fa-sign-in' not found.</status>
+</test>
+<test id="s1-t5" name="Test Case 5: Missing Element After Action" line="47">
+<kw name="Open Browser" library="SeleniumLibrary">
+<arg>https://the-internet.herokuapp.com/dropdown</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20260204 15:52:41.431" level="INFO">Opening browser 'chrome' to base url 'https://the-internet.herokuapp.com/dropdown'.</msg>
+<msg timestamp="20260204 15:53:04.154" level="WARN">Exception managing chrome: error sending request for url (https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json): error trying to connect: Operation timed out (os error 60)</msg>
+<status status="PASS" starttime="20260204 15:52:41.431" endtime="20260204 15:53:08.911"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="SeleniumLibrary">
+<arg>id:dropdown</arg>
+<arg>timeout=${TIMEOUT}</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" starttime="20260204 15:53:08.912" endtime="20260204 15:53:08.920"/>
+</kw>
+<kw name="Select From List By Value" library="SeleniumLibrary">
+<arg>id:wrong_dropdown_id</arg>
+<arg>1</arg>
+<doc>Selects options from selection list ``locator`` by ``values``.</doc>
+<msg timestamp="20260204 15:53:08.920" level="INFO">Selecting options from selection list 'id:wrong_dropdown_id' by value 1.</msg>
+<msg timestamp="20260204 15:53:08.995" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-5.png"&gt;&lt;img src="selenium-screenshot-5.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20260204 15:53:08.995" level="FAIL">List with locator 'id:wrong_dropdown_id' not found.</msg>
+<status status="FAIL" starttime="20260204 15:53:08.920" endtime="20260204 15:53:09.008"/>
+</kw>
+<kw name="Close Browser" library="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20260204 15:53:09.008" endtime="20260204 15:53:09.114"/>
+</kw>
+<doc>This test should FAIL - clicks wrong button, next element not found</doc>
+<status status="FAIL" starttime="20260204 15:52:41.431" endtime="20260204 15:53:09.114">List with locator 'id:wrong_dropdown_id' not found.</status>
+</test>
+<kw name="Close All Browsers" library="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" starttime="20260204 15:53:09.115" endtime="20260204 15:53:09.115"/>
+</kw>
+<doc>Simple test suite with intentional failures to demonstrate AI Failure Analyzer</doc>
+<status status="FAIL" starttime="20260204 15:50:44.915" endtime="20260204 15:53:09.115"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="5" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="5" skip="0" id="s1" name="SimpleFailureExample">SimpleFailureExample</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20260204 15:51:09.648" level="WARN">Exception managing chrome: error sending request for url (https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json): error trying to connect: Operation timed out (os error 60)</msg>
+<msg timestamp="20260204 15:51:37.279" level="WARN">Exception managing chrome: error sending request for url (https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json): error trying to connect: Operation timed out (os error 60)</msg>
+<msg timestamp="20260204 15:52:04.128" level="WARN">Exception managing chrome: error sending request for url (https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json): error trying to connect: Operation timed out (os error 60)</msg>
+<msg timestamp="20260204 15:52:36.051" level="WARN">Exception managing chrome: error sending request for url (https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json): error trying to connect: Operation timed out (os error 60)</msg>
+<msg timestamp="20260204 15:53:04.154" level="WARN">Exception managing chrome: error sending request for url (https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json): error trying to connect: Operation timed out (os error 60)</msg>
+</errors>
+</robot>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AI Failure Analysis Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 30px; }
+        .summary { background: #ecf0f1; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        .summary-stat { display: inline-block; margin: 10px 20px; }
+        .summary-stat .label { font-weight: bold; color: #7f8c8d; }
+        .summary-stat .value { font-size: 24px; font-weight: bold; }
+        .passed { color: #27ae60; }
+        .failed { color: #e74c3c; }
+        .failure-card { background: #fff; border-left: 4px solid #e74c3c; padding: 20px; margin: 20px 0; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .test-name { font-size: 18px; font-weight: bold; color: #2c3e50; margin-bottom: 10px; }
+        .error-section { background: #fee; padding: 15px; border-radius: 4px; margin: 10px 0; font-family: monospace; font-size: 13px; }
+        .ai-section { background: #e8f5e9; padding: 15px; border-radius: 4px; margin: 10px 0; }
+        .ai-section h4 { margin-top: 0; color: #2e7d32; }
+        .ai-content { white-space: pre-wrap; line-height: 1.6; }
+        .timestamp { color: #95a5a6; font-size: 12px; }
+        .emoji { font-size: 20px; margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="emoji">🤖</span>AI Failure Analysis Report</h1>
+        <p class="timestamp">Generated: 2026-02-04T15:57:51.922387</p>
+
+        <div class="summary">
+            <div class="summary-stat">
+                <div class="label">Total Tests</div>
+                <div class="value">5</div>
+            </div>
+            <div class="summary-stat">
+                <div class="label">Passed</div>
+                <div class="value passed">0</div>
+            </div>
+            <div class="summary-stat">
+                <div class="label">Failed</div>
+                <div class="value failed">5</div>
+            </div>
+        </div>
+        <h2>Failure Analysis</h2>
+        <div class="failure-card">
+            <div class="test-name">#1: Test Case 1: Successful Login</div>
+            <div class="error-section">
+                <strong>Error Message:</strong><br>
+                Button with locator 'css:.fa-sign-in' not found.
+            </div>
+            <div class="ai-section">
+                <h4><span class="emoji">💡</span>AI Analysis & Recommendations</h4>
+                <div class="ai-content">### Analysis of Test Failure
+
+#### 1. **Root Cause:**
+   - The error indicates that the button with the locator `css:.fa-sign-in` was not found on the page during the `SeleniumLibrary.Click Button` step.
+   - Possible reasons:
+     - The locator `css:.fa-sign-in` is incorrect or outdated (e.g., the button's class name has changed).
+     - The button is not rendered on the page yet due to slow loading or dynamic content.
+     - The button is hidden or disabled, making it inaccessible for interaction.
+
+#### 2. **Fix Suggestion:**
+   - **Verify and Update Locator:**
+     - Inspect the webpage using browser developer tools to confirm the correct locator for the sign-in button.
+     - Update the locator in the test script if necessary. For example:
+       ```robot
+       SeleniumLibrary.Click Element    css:.fa-sign-in
+       ```
+   - **Add Explicit Wait:**
+     - Ensure the button is visible and interactable before clicking. Replace `Wait Until Page Contains Element` with `Wait Until Element Is Visible`:
+       ```robot
+       SeleniumLibrary.Wait Until Element Is Visible    css:.fa-sign-in
+       SeleniumLibrary.Click Element    css:.fa-sign-in
+       ```
+   - **Debugging:**
+     - Add a screenshot capture step (`Capture Page Screenshot`) before the failure point to confirm the page state:
+       ```robot
+       SeleniumLibrary.Capture Page Screenshot
+       ```
+
+#### 3. **Prevention:**
+   - **Use Robust Locators:**
+     - Avoid relying solely on CSS classes that may change frequently. Use more stable locators like unique IDs or data attributes:
+       ```robot
+       SeleniumLibrary.Click Element    id:sign-in-button
+       ```
+   - **Implement Dynamic Waits:**
+     - Always use `Wait Until Element Is Visible` or `Wait Until Element Is Enabled` for elements that may load dynamically.
+   - **Regular Maintenance:**
+     - Periodically review and update locators to match changes in the application UI.
+   - **Error Handling:**
+     - Add error handling to capture screenshots and log additional details when a failure occurs:
+       ```robot
+       Run Keyword And Continue On Failure    SeleniumLibrary.Capture Page Screenshot
+       ```
+
+By combining these fixes and preventive measures, you can ensure more reliable and maintainable test automation scripts.</div>
+            </div>
+        </div>
+        <div class="failure-card">
+            <div class="test-name">#2: Test Case 2: Wrong Selector Failure</div>
+            <div class="error-section">
+                <strong>Error Message:</strong><br>
+                Element with locator 'id:wrong_password_id' not found.
+            </div>
+            <div class="ai-section">
+                <h4><span class="emoji">💡</span>AI Analysis & Recommendations</h4>
+                <div class="ai-content">### Analysis of Test Failure: Test Case 2 - Wrong Selector Failure
+
+---
+
+#### 1. **Root Cause**
+The failure occurred because the locator `id:wrong_password_id` used in the test does not match any element on the webpage. This could be due to:
+- A typo in the locator value.
+- The element's `id` attribute has changed or is dynamic.
+- The element is not present on the page at the time of execution.
+
+---
+
+#### 2. **Fix Suggestion**
+Update the locator to match the correct identifier for the target element. Steps:
+- Inspect the webpage using browser developer tools (e.g., Chrome DevTools) to find the correct `id` or alternative locator (e.g., `name`, `xpath`, `css selector`).
+- Replace `id:wrong_password_id` with the correct locator in the test script.
+
+Example fix:
+```robot
+SeleniumLibrary.Input Text    id:correct_password_id    ${password}
+```
+
+If the `id` is dynamic, use a more stable locator, such as:
+```robot
+SeleniumLibrary.Input Text    xpath://input[@name='password']    ${password}
+```
+
+---
+
+#### 3. **Prevention**
+To avoid similar issues in the future:
+- **Use Stable Locators**: Prefer locators that are less likely to change, such as `name`, `aria-label`, or `xpath` with meaningful attributes.
+- **Validate Locators**: Test all locators in the browser's developer tools before adding them to the script.
+- **Dynamic Element Handling**: If elements are dynamic, use strategies like partial matching (`contains()` in XPath) or wait for the element to appear using `Wait Until Element Is Visible`.
+- **Error Logging**: Implement detailed logging to capture locator failures during test execution for easier debugging.
+
+Example preventive code snippet:
+```robot
+SeleniumLibrary.Wait Until Element Is Visible    xpath://input[@name='password']    timeout=10s
+SeleniumLibrary.Input Text    xpath://input[@name='password']    ${password}
+```</div>
+            </div>
+        </div>
+        <div class="failure-card">
+            <div class="test-name">#3: Test Case 3: Timeout Failure</div>
+            <div class="error-section">
+                <strong>Error Message:</strong><br>
+                Element 'id:nonexistent_element' did not appear in 5 seconds.
+            </div>
+            <div class="ai-section">
+                <h4><span class="emoji">💡</span>AI Analysis & Recommendations</h4>
+                <div class="ai-content">### Analysis of Test Failure: Timeout Failure
+
+#### 1. **Root Cause**
+The test failed because the element `'id:nonexistent_element'` did not appear within the specified timeout of 5 seconds. This could happen due to:
+- The element does not exist on the page (e.g., incorrect locator or dynamic content).
+- The element takes longer than 5 seconds to load due to slow page rendering or asynchronous operations.
+
+#### 2. **Fix Suggestion**
+- **Verify Locator**: Ensure `'id:nonexistent_element'` is correct and matches the actual element on the page.
+- **Increase Timeout**: Adjust the timeout in the `Wait Until Page Contains Element` keyword to accommodate slower page loading. Example:
+  ```robot
+  SeleniumLibrary.Wait Until Page Contains Element  id:nonexistent_element  timeout=10s
+  ```
+- **Use Conditional Wait**: If the element is dynamically loaded, consider using `Wait Until Element Is Visible` or `Wait Until Element Exists` instead:
+  ```robot
+  SeleniumLibrary.Wait Until Element Exists  id:nonexistent_element  timeout=10s
+  ```
+
+#### 3. **Prevention**
+- **Dynamic Locators**: Use robust locators (e.g., XPath or CSS selectors) that are less likely to break due to UI changes.
+- **Timeout Configuration**: Set a reasonable default timeout in the Robot Framework `SeleniumLibrary` settings:
+  ```robot
+  *** Settings ***
+  Library  SeleniumLibrary  timeout=10s
+  ```
+- **Page Load Validation**: Add a step to confirm the page has fully loaded before interacting with elements:
+  ```robot
+  SeleniumLibrary.Wait Until Page Contains  Expected Text or Element
+  ```
+- **Error Handling**: Implement error handling to log missing elements and fail gracefully:
+  ```robot
+  Run Keyword And Continue On Failure  SeleniumLibrary.Wait Until Element Exists  id:nonexistent_element
+  ```
+
+By verifying locators, adjusting timeouts, and implementing robust waiting mechanisms, similar issues can be minimized.</div>
+            </div>
+        </div>
+        <div class="failure-card">
+            <div class="test-name">#4: Test Case 4: Assertion Failure</div>
+            <div class="error-section">
+                <strong>Error Message:</strong><br>
+                Button with locator 'css:.fa-sign-in' not found.
+            </div>
+            <div class="ai-section">
+                <h4><span class="emoji">💡</span>AI Analysis & Recommendations</h4>
+                <div class="ai-content">### Analysis of Test Failure
+
+#### 1. **Root Cause**:
+The error indicates that the button with the locator `css:.fa-sign-in` was not found on the page during the `SeleniumLibrary.Click Button` step. This could be due to:
+- The button not being present on the page at the time of execution (e.g., slow page load or dynamic content).
+- Incorrect locator (`css:.fa-sign-in`) that does not match the actual element.
+- The element being hidden or disabled when the test attempted to interact with it.
+
+#### 2. **Fix Suggestion**:
+Update the test to ensure the button is present and interactable before clicking it:
+```robot
+SeleniumLibrary.Wait Until Element Is Visible    css:.fa-sign-in    timeout=10s
+SeleniumLibrary.Wait Until Element Is Enabled    css:.fa-sign-in    timeout=10s
+SeleniumLibrary.Click Button                     css:.fa-sign-in
+```
+- Use `Wait Until Element Is Visible` to ensure the button is visible.
+- Use `Wait Until Element Is Enabled` to ensure the button is interactable.
+
+If the locator is incorrect, verify the correct CSS selector using browser developer tools and update it accordingly.
+
+#### 3. **Prevention**:
+- **Dynamic Waits**: Always use appropriate wait keywords (`Wait Until Page Contains Element`, `Wait Until Element Is Visible`, etc.) to handle dynamic content and ensure elements are ready for interaction.
+- **Locator Validation**: Validate all locators before writing tests using browser developer tools to ensure they uniquely identify the intended element.
+- **Error Logging**: Add meaningful error messages in the test to identify issues quickly:
+  ```robot
+  Run Keyword And Return Status    SeleniumLibrary.Wait Until Element Is Visible    css:.fa-sign-in    timeout=10s
+  ```
+
+By implementing these practices, you can reduce flaky tests and improve reliability.</div>
+            </div>
+        </div>
+        <div class="failure-card">
+            <div class="test-name">#5: Test Case 5: Missing Element After Action</div>
+            <div class="error-section">
+                <strong>Error Message:</strong><br>
+                List with locator 'id:wrong_dropdown_id' not found.
+            </div>
+            <div class="ai-section">
+                <h4><span class="emoji">💡</span>AI Analysis & Recommendations</h4>
+                <div class="ai-content">### Analysis of Test Failure
+
+#### 1. **Root Cause**  
+The error indicates that the test attempted to interact with a dropdown element using the locator `id:wrong_dropdown_id`, but the element was not found on the page. This likely happened because:
+- The locator `id:wrong_dropdown_id` is incorrect or outdated.
+- The element might not be present on the page at the time of interaction due to timing issues (e.g., the page or element is still loading).
+
+#### 2. **Fix Suggestion**  
+To resolve the issue:
+- **Verify the locator**: Confirm that the element exists on the page and its locator is correct. Update the locator if necessary.
+  ```robot
+  SeleniumLibrary.Wait Until Page Contains Element    id:correct_dropdown_id
+  SeleniumLibrary.Select From List By Value          id:correct_dropdown_id    value_to_select
+  ```
+- **Add proper waiting**: Ensure the test waits for the element to be visible and interactable before performing actions. Use `Wait Until Element Is Visible` or `Wait Until Page Contains Element`.
+
+#### 3. **Prevention**  
+To prevent similar issues in the future:
+- **Use dynamic locators**: Avoid hardcoding locators. Use descriptive and stable locators like `data-testid` or `aria-label` if available.
+- **Implement robust waiting**: Always wait for elements to be visible and interactable before interacting with them. Example:
+  ```robot
+  SeleniumLibrary.Wait Until Element Is Visible    id:correct_dropdown_id
+  ```
+- **Validate locators regularly**: Periodically review and update locators to ensure they match the current application state.
+- **Use debugging tools**: Utilize browser developer tools or Selenium IDE to validate locators before adding them to tests.
+
+By addressing these points, you can ensure more reliable and maintainable test automation scripts.</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

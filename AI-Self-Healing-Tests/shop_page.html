@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Online Shop - Original Version</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .header { background: #4CAF50; color: white; padding: 20px; text-align: center; }
+        .search-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; }
+        .product { border: 1px solid #ccc; padding: 15px; margin: 10px 0; background: #f9f9f9; }
+        .button { background: #008CBA; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        .button:hover { background: #007B9A; }
+        input[type="text"] { padding: 8px; width: 300px; }
+        .success { background: #d4edda; color: #155724; padding: 10px; margin: 10px 0; display: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 Simple Online Bookstore</h1>
+        <p>Original Version - All elements have simple IDs</p>
+    </div>
+
+    <div class="search-section">
+        <h2>🔍 Find Your Book</h2>
+        <input type="text" id="search-box" placeholder="Search for books..." />
+        <button class="button" onclick="searchBooks()">Search</button>
+    </div>
+
+    <div class="product">
+        <h3>📖 Robot Framework Book</h3>
+        <p><strong>Price:</strong> $29.99</p>
+        <p><strong>Description:</strong> Complete guide to Robot Framework test automation</p>
+        <button id="add-to-cart" class="button" onclick="addToCart()">Add to Cart</button>
+    </div>
+
+    <div class="product">
+        <h3>🤖 Selenium Handbook</h3>
+        <p><strong>Price:</strong> $24.99</p>
+        <p><strong>Description:</strong> Master web automation with Selenium</p>
+        <button id="add-to-cart-2" class="button" onclick="addToCart()">Add to Cart</button>
+    </div>
+
+    <div id="success-notification" class="success">
+        Item added to cart successfully! 🛒
+    </div>
+
+    <script>
+        function searchBooks() {
+            const searchBox = document.getElementById('search-box');
+            console.log('Searching for:', searchBox.value);
+            alert('Search functionality - found books related to: ' + searchBox.value);
+        }
+
+        function addToCart() {
+            console.log('Adding item to cart');
+            const notification = document.getElementById('success-notification');
+            notification.style.display = 'block';
+            notification.textContent = 'Item added to cart';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,2046 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.0.2 (Python 3.11.8 on darwin)" generated="20251227 21:01:16.084" rpa="false" schemaversion="3">
+<suite id="s1" name="SelfHealingTests" source="/Users/r0n01gu/Documents/QA-Automation-Repo/DSAR-CANADA-E2E-Automation/AI-Self-Healing-Tests/SelfHealingTests.robot">
+<kw name="Open Browser" library="SeleniumLibrary" type="SETUP">
+<arg>about:blank</arg>
+<arg>chrome</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<msg timestamp="20251227 21:01:16.768" level="INFO">Opening browser 'chrome' to base url 'about:blank'.</msg>
+<msg timestamp="20251227 21:01:19.947" level="WARN">The chromedriver version (142.0.7444.59) detected in PATH at /usr/local/bin/chromedriver might not be compatible with the detected chrome version (143.0.7499.169); currently, chromedriver 143.0.7499.169 is recommended for chrome 143.*, so it is advised to delete the driver in PATH and retry</msg>
+<status status="PASS" starttime="20251227 21:01:16.768" endtime="20251227 21:01:21.933"/>
+</kw>
+<test id="s1-t1" name="Test Original Page With Self Healing" line="19">
+<kw name="Log" library="BuiltIn">
+<arg>🧪 TESTING: Original Page with Self-Healing</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:21.936" level="INFO">🧪 TESTING: Original Page with Self-Healing</msg>
+<status status="PASS" starttime="20251227 21:01:21.935" endtime="20251227 21:01:21.936"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>============================================================</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:21.936" level="INFO">============================================================</msg>
+<status status="PASS" starttime="20251227 21:01:21.936" endtime="20251227 21:01:21.936"/>
+</kw>
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${ORIGINAL_PAGE}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20251227 21:01:21.936" level="INFO">Opening url 'file:///Users/r0n01gu/Documents/QA-Automation-Repo/DSAR-CANADA-E2E-Automation/AI-Self-Healing-Tests/test_page.html'</msg>
+<status status="PASS" starttime="20251227 21:01:21.936" endtime="20251227 21:01:22.102"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>📂 Loaded original page</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.102" level="INFO">📂 Loaded original page</msg>
+<status status="PASS" starttime="20251227 21:01:22.102" endtime="20251227 21:01:22.102"/>
+</kw>
+<kw name="Fill Login Form With Healing" library="SelfHealingKeywords">
+<arg>${TEST_EMAIL}</arg>
+<arg>${TEST_PASSWORD}</arg>
+<arg>${TEST_COUNTRY}</arg>
+<doc>Fills entire login form using self-healing</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🎯 Starting self-healing login form fill...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.102" level="INFO">🎯 Starting self-healing login form fill...</msg>
+<status status="PASS" starttime="20251227 21:01:22.102" endtime="20251227 21:01:22.102"/>
+</kw>
+<kw name="Heal And Input Text" library="SelfHealingKeywords">
+<arg>email field</arg>
+<arg>${email}</arg>
+<arg>@{EMAIL_STRATEGIES}</arg>
+<doc>Finds element with healing and inputs text</doc>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${locator}</var>
+<arg>${element_name}</arg>
+<arg>@{strategies}</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.103" level="INFO">🔍 Searching for 'email field' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:22.103" endtime="20251227 21:01:22.103"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=email</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:22.103" endtime="20251227 21:01:22.144"/>
+</kw>
+<msg timestamp="20251227 21:01:22.144" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:22.103" endtime="20251227 21:01:22.144"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.144" level="INFO">✅ Found 'email field' using strategy 1: id=email</msg>
+<status status="PASS" starttime="20251227 21:01:22.144" endtime="20251227 21:01:22.144"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:22.144" endtime="20251227 21:01:22.144"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:22.144" endtime="20251227 21:01:22.144"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:22.144" endtime="20251227 21:01:22.144"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:22.144" endtime="20251227 21:01:22.144"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:22.144" endtime="20251227 21:01:22.144"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:22.103" endtime="20251227 21:01:22.144"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:22.103" endtime="20251227 21:01:22.144"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:22.144" endtime="20251227 21:01:22.144"/>
+</kw>
+<msg timestamp="20251227 21:01:22.144" level="INFO">${locator} = id=email</msg>
+<status status="PASS" starttime="20251227 21:01:22.102" endtime="20251227 21:01:22.144"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>${text}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20251227 21:01:22.144" level="INFO">Typing text 'test@example.com' into text field 'id=email'.</msg>
+<status status="PASS" starttime="20251227 21:01:22.144" endtime="20251227 21:01:22.232"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>📝 Text entered in '${element_name}': ${text}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.232" level="INFO">📝 Text entered in 'email field': test@example.com</msg>
+<status status="PASS" starttime="20251227 21:01:22.232" endtime="20251227 21:01:22.232"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:22.102" endtime="20251227 21:01:22.232"/>
+</kw>
+<kw name="Heal And Input Text" library="SelfHealingKeywords">
+<arg>password field</arg>
+<arg>${password}</arg>
+<arg>@{PASSWORD_STRATEGIES}</arg>
+<doc>Finds element with healing and inputs text</doc>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${locator}</var>
+<arg>${element_name}</arg>
+<arg>@{strategies}</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.233" level="INFO">🔍 Searching for 'password field' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:22.232" endtime="20251227 21:01:22.233"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=password</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:22.233" endtime="20251227 21:01:22.243"/>
+</kw>
+<msg timestamp="20251227 21:01:22.243" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:22.233" endtime="20251227 21:01:22.243"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.243" level="INFO">✅ Found 'password field' using strategy 1: id=password</msg>
+<status status="PASS" starttime="20251227 21:01:22.243" endtime="20251227 21:01:22.243"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:22.243" endtime="20251227 21:01:22.243"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:22.243" endtime="20251227 21:01:22.243"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:22.243" endtime="20251227 21:01:22.243"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:22.243" endtime="20251227 21:01:22.243"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:22.243" endtime="20251227 21:01:22.243"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:22.233" endtime="20251227 21:01:22.243"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:22.233" endtime="20251227 21:01:22.243"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:22.243" endtime="20251227 21:01:22.244"/>
+</kw>
+<msg timestamp="20251227 21:01:22.244" level="INFO">${locator} = id=password</msg>
+<status status="PASS" starttime="20251227 21:01:22.232" endtime="20251227 21:01:22.244"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>${text}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20251227 21:01:22.244" level="INFO">Typing text 'password123' into text field 'id=password'.</msg>
+<status status="PASS" starttime="20251227 21:01:22.244" endtime="20251227 21:01:22.278"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>📝 Text entered in '${element_name}': ${text}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.278" level="INFO">📝 Text entered in 'password field': password123</msg>
+<status status="PASS" starttime="20251227 21:01:22.278" endtime="20251227 21:01:22.278"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:22.232" endtime="20251227 21:01:22.278"/>
+</kw>
+<kw name="Heal And Select From List" library="SelfHealingKeywords">
+<arg>country dropdown</arg>
+<arg>${country}</arg>
+<arg>@{COUNTRY_STRATEGIES}</arg>
+<doc>Finds dropdown with healing and selects option</doc>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${locator}</var>
+<arg>${element_name}</arg>
+<arg>@{strategies}</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.279" level="INFO">🔍 Searching for 'country dropdown' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:22.278" endtime="20251227 21:01:22.279"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=country</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:22.279" endtime="20251227 21:01:22.287"/>
+</kw>
+<msg timestamp="20251227 21:01:22.287" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:22.279" endtime="20251227 21:01:22.287"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.287" level="INFO">✅ Found 'country dropdown' using strategy 1: id=country</msg>
+<status status="PASS" starttime="20251227 21:01:22.287" endtime="20251227 21:01:22.288"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:22.288" endtime="20251227 21:01:22.288"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:22.287" endtime="20251227 21:01:22.288"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:22.288" endtime="20251227 21:01:22.288"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:22.288" endtime="20251227 21:01:22.288"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:22.287" endtime="20251227 21:01:22.288"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:22.279" endtime="20251227 21:01:22.288"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:22.279" endtime="20251227 21:01:22.288"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:22.288" endtime="20251227 21:01:22.288"/>
+</kw>
+<msg timestamp="20251227 21:01:22.288" level="INFO">${locator} = id=country</msg>
+<status status="PASS" starttime="20251227 21:01:22.278" endtime="20251227 21:01:22.288"/>
+</kw>
+<kw name="Select From List By Value" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>${value}</arg>
+<doc>Selects options from selection list ``locator`` by ``values``.</doc>
+<msg timestamp="20251227 21:01:22.288" level="INFO">Selecting options from selection list 'id=country' by value us.</msg>
+<status status="PASS" starttime="20251227 21:01:22.288" endtime="20251227 21:01:22.322"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>🔽 Selected '${value}' in '${element_name}'</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.322" level="INFO">🔽 Selected 'us' in 'country dropdown'</msg>
+<status status="PASS" starttime="20251227 21:01:22.322" endtime="20251227 21:01:22.322"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:22.278" endtime="20251227 21:01:22.322"/>
+</kw>
+<kw name="Heal And Click Element" library="SelfHealingKeywords">
+<arg>submit button</arg>
+<arg>@{SUBMIT_STRATEGIES}</arg>
+<doc>Finds element with healing and clicks it</doc>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${locator}</var>
+<arg>${element_name}</arg>
+<arg>@{strategies}</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.323" level="INFO">🔍 Searching for 'submit button' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:22.323" endtime="20251227 21:01:22.323"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=submit-btn</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:22.323" endtime="20251227 21:01:22.331"/>
+</kw>
+<msg timestamp="20251227 21:01:22.331" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:22.323" endtime="20251227 21:01:22.331"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.331" level="INFO">✅ Found 'submit button' using strategy 1: id=submit-btn</msg>
+<status status="PASS" starttime="20251227 21:01:22.331" endtime="20251227 21:01:22.331"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:22.331" endtime="20251227 21:01:22.331"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:22.331" endtime="20251227 21:01:22.331"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:22.332" endtime="20251227 21:01:22.332"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:22.331" endtime="20251227 21:01:22.332"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:22.331" endtime="20251227 21:01:22.332"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:22.323" endtime="20251227 21:01:22.332"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:22.323" endtime="20251227 21:01:22.332"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:22.332" endtime="20251227 21:01:22.332"/>
+</kw>
+<msg timestamp="20251227 21:01:22.332" level="INFO">${locator} = id=submit-btn</msg>
+<status status="PASS" starttime="20251227 21:01:22.322" endtime="20251227 21:01:22.332"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20251227 21:01:22.332" level="INFO">Clicking element 'id=submit-btn'.</msg>
+<status status="PASS" starttime="20251227 21:01:22.332" endtime="20251227 21:01:22.357"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>🖱️ Clicked '${element_name}'</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.357" level="INFO">🖱️ Clicked 'submit button'</msg>
+<status status="PASS" starttime="20251227 21:01:22.357" endtime="20251227 21:01:22.357"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:22.322" endtime="20251227 21:01:22.357"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>🎉 Login form filled successfully with self-healing!</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.357" level="INFO">🎉 Login form filled successfully with self-healing!</msg>
+<status status="PASS" starttime="20251227 21:01:22.357" endtime="20251227 21:01:22.357"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:22.102" endtime="20251227 21:01:22.357"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>id=success-message</arg>
+<arg>timeout=5s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:22.357" endtime="20251227 21:01:22.365"/>
+</kw>
+<kw name="Element Should Be Visible" library="SeleniumLibrary">
+<arg>id=success-message</arg>
+<doc>Verifies that the element identified by ``locator`` is visible.</doc>
+<msg timestamp="20251227 21:01:22.371" level="INFO">Element 'id=success-message' is displayed.</msg>
+<status status="PASS" starttime="20251227 21:01:22.365" endtime="20251227 21:01:22.371"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>✅ SUCCESS: Original page test completed!</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.371" level="INFO">✅ SUCCESS: Original page test completed!</msg>
+<status status="PASS" starttime="20251227 21:01:22.371" endtime="20251227 21:01:22.371"/>
+</kw>
+<doc>Test the original page using self-healing keywords</doc>
+<tag>original-page</tag>
+<tag>self-healing</tag>
+<status status="PASS" starttime="20251227 21:01:21.934" endtime="20251227 21:01:22.371"/>
+</test>
+<test id="s1-t2" name="Test Changed Page With Self Healing" line="38">
+<kw name="Log" library="BuiltIn">
+<arg>🧪 TESTING: Changed Page with Self-Healing</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.372" level="INFO">🧪 TESTING: Changed Page with Self-Healing</msg>
+<status status="PASS" starttime="20251227 21:01:22.372" endtime="20251227 21:01:22.372"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>============================================================</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.372" level="INFO">============================================================</msg>
+<status status="PASS" starttime="20251227 21:01:22.372" endtime="20251227 21:01:22.372"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>💡 This page has different element IDs - watch the healing work!</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.372" level="INFO">💡 This page has different element IDs - watch the healing work!</msg>
+<status status="PASS" starttime="20251227 21:01:22.372" endtime="20251227 21:01:22.372"/>
+</kw>
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${CHANGED_PAGE}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20251227 21:01:22.372" level="INFO">Opening url 'file:///Users/r0n01gu/Documents/QA-Automation-Repo/DSAR-CANADA-E2E-Automation/AI-Self-Healing-Tests/test_page_changed.html'</msg>
+<status status="PASS" starttime="20251227 21:01:22.372" endtime="20251227 21:01:22.380"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>📂 Loaded changed page (with different element IDs)</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.381" level="INFO">📂 Loaded changed page (with different element IDs)</msg>
+<status status="PASS" starttime="20251227 21:01:22.380" endtime="20251227 21:01:22.381"/>
+</kw>
+<kw name="Fill Login Form With Healing" library="SelfHealingKeywords">
+<arg>${TEST_EMAIL}</arg>
+<arg>${TEST_PASSWORD}</arg>
+<arg>${TEST_COUNTRY}</arg>
+<doc>Fills entire login form using self-healing</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🎯 Starting self-healing login form fill...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.381" level="INFO">🎯 Starting self-healing login form fill...</msg>
+<status status="PASS" starttime="20251227 21:01:22.381" endtime="20251227 21:01:22.381"/>
+</kw>
+<kw name="Heal And Input Text" library="SelfHealingKeywords">
+<arg>email field</arg>
+<arg>${email}</arg>
+<arg>@{EMAIL_STRATEGIES}</arg>
+<doc>Finds element with healing and inputs text</doc>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${locator}</var>
+<arg>${element_name}</arg>
+<arg>@{strategies}</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:22.381" level="INFO">🔍 Searching for 'email field' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:22.381" endtime="20251227 21:01:22.381"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=email</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<msg timestamp="20251227 21:01:24.713" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20251227 21:01:24.713" level="FAIL">Element 'id=email' not visible after 2 seconds.</msg>
+<status status="FAIL" starttime="20251227 21:01:22.382" endtime="20251227 21:01:24.745"/>
+</kw>
+<msg timestamp="20251227 21:01:24.745" level="INFO">${status} = False</msg>
+<status status="PASS" starttime="20251227 21:01:22.381" endtime="20251227 21:01:24.745"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:24.745" endtime="20251227 21:01:24.745"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="NOT RUN" starttime="20251227 21:01:24.745" endtime="20251227 21:01:24.745"/>
+</return>
+<status status="NOT RUN" starttime="20251227 21:01:24.745" endtime="20251227 21:01:24.745"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:24.745" level="INFO">❌ Strategy 1 failed: id=email</msg>
+<status status="PASS" starttime="20251227 21:01:24.745" endtime="20251227 21:01:24.745"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:24.745" endtime="20251227 21:01:24.745"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:24.745" endtime="20251227 21:01:24.745"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:22.381" endtime="20251227 21:01:24.745"/>
+</iter>
+<iter>
+<var name="${index}">2</var>
+<var name="${strategy}">id=user-email</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:24.745" endtime="20251227 21:01:24.756"/>
+</kw>
+<msg timestamp="20251227 21:01:24.756" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:24.745" endtime="20251227 21:01:24.756"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:24.756" level="INFO">✅ Found 'email field' using strategy 2: id=user-email</msg>
+<status status="PASS" starttime="20251227 21:01:24.756" endtime="20251227 21:01:24.756"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:24.756" endtime="20251227 21:01:24.756"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:24.756" endtime="20251227 21:01:24.756"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:24.757" endtime="20251227 21:01:24.757"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:24.756" endtime="20251227 21:01:24.757"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:24.756" endtime="20251227 21:01:24.757"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:24.745" endtime="20251227 21:01:24.757"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:22.381" endtime="20251227 21:01:24.757"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:24.757" endtime="20251227 21:01:24.757"/>
+</kw>
+<msg timestamp="20251227 21:01:24.757" level="INFO">${locator} = id=user-email</msg>
+<status status="PASS" starttime="20251227 21:01:22.381" endtime="20251227 21:01:24.757"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>${text}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20251227 21:01:24.757" level="INFO">Typing text 'test@example.com' into text field 'id=user-email'.</msg>
+<status status="PASS" starttime="20251227 21:01:24.757" endtime="20251227 21:01:24.791"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>📝 Text entered in '${element_name}': ${text}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:24.791" level="INFO">📝 Text entered in 'email field': test@example.com</msg>
+<status status="PASS" starttime="20251227 21:01:24.791" endtime="20251227 21:01:24.791"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:22.381" endtime="20251227 21:01:24.791"/>
+</kw>
+<kw name="Heal And Input Text" library="SelfHealingKeywords">
+<arg>password field</arg>
+<arg>${password}</arg>
+<arg>@{PASSWORD_STRATEGIES}</arg>
+<doc>Finds element with healing and inputs text</doc>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${locator}</var>
+<arg>${element_name}</arg>
+<arg>@{strategies}</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:24.791" level="INFO">🔍 Searching for 'password field' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:24.791" endtime="20251227 21:01:24.791"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=password</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<msg timestamp="20251227 21:01:26.961" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-2.png"&gt;&lt;img src="selenium-screenshot-2.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20251227 21:01:26.961" level="FAIL">Element 'id=password' not visible after 2 seconds.</msg>
+<status status="FAIL" starttime="20251227 21:01:24.792" endtime="20251227 21:01:26.961"/>
+</kw>
+<msg timestamp="20251227 21:01:26.961" level="INFO">${status} = False</msg>
+<status status="PASS" starttime="20251227 21:01:24.792" endtime="20251227 21:01:26.961"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:26.962" endtime="20251227 21:01:26.962"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="NOT RUN" starttime="20251227 21:01:26.962" endtime="20251227 21:01:26.962"/>
+</return>
+<status status="NOT RUN" starttime="20251227 21:01:26.961" endtime="20251227 21:01:26.962"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:26.962" level="INFO">❌ Strategy 1 failed: id=password</msg>
+<status status="PASS" starttime="20251227 21:01:26.962" endtime="20251227 21:01:26.962"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:26.962" endtime="20251227 21:01:26.962"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:26.961" endtime="20251227 21:01:26.962"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:24.791" endtime="20251227 21:01:26.962"/>
+</iter>
+<iter>
+<var name="${index}">2</var>
+<var name="${strategy}">id=user-password</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:26.962" endtime="20251227 21:01:26.970"/>
+</kw>
+<msg timestamp="20251227 21:01:26.970" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:26.962" endtime="20251227 21:01:26.970"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:26.970" level="INFO">✅ Found 'password field' using strategy 2: id=user-password</msg>
+<status status="PASS" starttime="20251227 21:01:26.970" endtime="20251227 21:01:26.970"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:26.970" endtime="20251227 21:01:26.970"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:26.970" endtime="20251227 21:01:26.971"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:26.971" endtime="20251227 21:01:26.971"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:26.971" endtime="20251227 21:01:26.971"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:26.970" endtime="20251227 21:01:26.971"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:26.962" endtime="20251227 21:01:26.971"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:24.791" endtime="20251227 21:01:26.971"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:26.971" endtime="20251227 21:01:26.971"/>
+</kw>
+<msg timestamp="20251227 21:01:26.971" level="INFO">${locator} = id=user-password</msg>
+<status status="PASS" starttime="20251227 21:01:24.791" endtime="20251227 21:01:26.971"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>${text}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20251227 21:01:26.971" level="INFO">Typing text 'password123' into text field 'id=user-password'.</msg>
+<status status="PASS" starttime="20251227 21:01:26.971" endtime="20251227 21:01:27.006"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>📝 Text entered in '${element_name}': ${text}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:27.006" level="INFO">📝 Text entered in 'password field': password123</msg>
+<status status="PASS" starttime="20251227 21:01:27.006" endtime="20251227 21:01:27.006"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:24.791" endtime="20251227 21:01:27.006"/>
+</kw>
+<kw name="Heal And Select From List" library="SelfHealingKeywords">
+<arg>country dropdown</arg>
+<arg>${country}</arg>
+<arg>@{COUNTRY_STRATEGIES}</arg>
+<doc>Finds dropdown with healing and selects option</doc>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${locator}</var>
+<arg>${element_name}</arg>
+<arg>@{strategies}</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:27.006" level="INFO">🔍 Searching for 'country dropdown' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:27.006" endtime="20251227 21:01:27.006"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=country</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<msg timestamp="20251227 21:01:29.193" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-3.png"&gt;&lt;img src="selenium-screenshot-3.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20251227 21:01:29.193" level="FAIL">Element 'id=country' not visible after 2 seconds.</msg>
+<status status="FAIL" starttime="20251227 21:01:27.006" endtime="20251227 21:01:29.193"/>
+</kw>
+<msg timestamp="20251227 21:01:29.193" level="INFO">${status} = False</msg>
+<status status="PASS" starttime="20251227 21:01:27.006" endtime="20251227 21:01:29.193"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:29.193" endtime="20251227 21:01:29.193"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="NOT RUN" starttime="20251227 21:01:29.193" endtime="20251227 21:01:29.193"/>
+</return>
+<status status="NOT RUN" starttime="20251227 21:01:29.193" endtime="20251227 21:01:29.193"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:29.193" level="INFO">❌ Strategy 1 failed: id=country</msg>
+<status status="PASS" starttime="20251227 21:01:29.193" endtime="20251227 21:01:29.193"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:29.193" endtime="20251227 21:01:29.193"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:29.193" endtime="20251227 21:01:29.193"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:27.006" endtime="20251227 21:01:29.193"/>
+</iter>
+<iter>
+<var name="${index}">2</var>
+<var name="${strategy}">id=user-country</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:29.194" endtime="20251227 21:01:29.201"/>
+</kw>
+<msg timestamp="20251227 21:01:29.201" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:29.194" endtime="20251227 21:01:29.201"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:29.202" level="INFO">✅ Found 'country dropdown' using strategy 2: id=user-country</msg>
+<status status="PASS" starttime="20251227 21:01:29.201" endtime="20251227 21:01:29.202"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:29.202" endtime="20251227 21:01:29.202"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:29.201" endtime="20251227 21:01:29.202"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:29.202" endtime="20251227 21:01:29.202"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:29.202" endtime="20251227 21:01:29.202"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:29.201" endtime="20251227 21:01:29.202"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:29.193" endtime="20251227 21:01:29.202"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:27.006" endtime="20251227 21:01:29.202"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:29.202" endtime="20251227 21:01:29.202"/>
+</kw>
+<msg timestamp="20251227 21:01:29.202" level="INFO">${locator} = id=user-country</msg>
+<status status="PASS" starttime="20251227 21:01:27.006" endtime="20251227 21:01:29.202"/>
+</kw>
+<kw name="Select From List By Value" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>${value}</arg>
+<doc>Selects options from selection list ``locator`` by ``values``.</doc>
+<msg timestamp="20251227 21:01:29.202" level="INFO">Selecting options from selection list 'id=user-country' by value us.</msg>
+<status status="PASS" starttime="20251227 21:01:29.202" endtime="20251227 21:01:29.225"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>🔽 Selected '${value}' in '${element_name}'</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:29.225" level="INFO">🔽 Selected 'us' in 'country dropdown'</msg>
+<status status="PASS" starttime="20251227 21:01:29.225" endtime="20251227 21:01:29.225"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:27.006" endtime="20251227 21:01:29.225"/>
+</kw>
+<kw name="Heal And Click Element" library="SelfHealingKeywords">
+<arg>submit button</arg>
+<arg>@{SUBMIT_STRATEGIES}</arg>
+<doc>Finds element with healing and clicks it</doc>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${locator}</var>
+<arg>${element_name}</arg>
+<arg>@{strategies}</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:29.226" level="INFO">🔍 Searching for 'submit button' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:29.226" endtime="20251227 21:01:29.226"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=submit-btn</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<msg timestamp="20251227 21:01:31.436" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-4.png"&gt;&lt;img src="selenium-screenshot-4.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20251227 21:01:31.436" level="FAIL">Element 'id=submit-btn' not visible after 2 seconds.</msg>
+<status status="FAIL" starttime="20251227 21:01:29.226" endtime="20251227 21:01:31.436"/>
+</kw>
+<msg timestamp="20251227 21:01:31.436" level="INFO">${status} = False</msg>
+<status status="PASS" starttime="20251227 21:01:29.226" endtime="20251227 21:01:31.436"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:31.437" endtime="20251227 21:01:31.437"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="NOT RUN" starttime="20251227 21:01:31.437" endtime="20251227 21:01:31.437"/>
+</return>
+<status status="NOT RUN" starttime="20251227 21:01:31.436" endtime="20251227 21:01:31.437"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:31.437" level="INFO">❌ Strategy 1 failed: id=submit-btn</msg>
+<status status="PASS" starttime="20251227 21:01:31.437" endtime="20251227 21:01:31.437"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:31.437" endtime="20251227 21:01:31.437"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:31.436" endtime="20251227 21:01:31.437"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:29.226" endtime="20251227 21:01:31.437"/>
+</iter>
+<iter>
+<var name="${index}">2</var>
+<var name="${strategy}">id=login-submit-button</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:31.437" endtime="20251227 21:01:31.446"/>
+</kw>
+<msg timestamp="20251227 21:01:31.446" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:31.437" endtime="20251227 21:01:31.446"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:31.446" level="INFO">✅ Found 'submit button' using strategy 2: id=login-submit-button</msg>
+<status status="PASS" starttime="20251227 21:01:31.446" endtime="20251227 21:01:31.446"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:31.446" endtime="20251227 21:01:31.446"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:31.446" endtime="20251227 21:01:31.446"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:31.446" endtime="20251227 21:01:31.446"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:31.446" endtime="20251227 21:01:31.446"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:31.446" endtime="20251227 21:01:31.446"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:31.437" endtime="20251227 21:01:31.446"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:29.226" endtime="20251227 21:01:31.446"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:31.446" endtime="20251227 21:01:31.446"/>
+</kw>
+<msg timestamp="20251227 21:01:31.446" level="INFO">${locator} = id=login-submit-button</msg>
+<status status="PASS" starttime="20251227 21:01:29.225" endtime="20251227 21:01:31.446"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20251227 21:01:31.446" level="INFO">Clicking element 'id=login-submit-button'.</msg>
+<status status="PASS" starttime="20251227 21:01:31.446" endtime="20251227 21:01:31.470"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>🖱️ Clicked '${element_name}'</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:31.470" level="INFO">🖱️ Clicked 'submit button'</msg>
+<status status="PASS" starttime="20251227 21:01:31.470" endtime="20251227 21:01:31.470"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:29.225" endtime="20251227 21:01:31.470"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>🎉 Login form filled successfully with self-healing!</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:31.470" level="INFO">🎉 Login form filled successfully with self-healing!</msg>
+<status status="PASS" starttime="20251227 21:01:31.470" endtime="20251227 21:01:31.470"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:22.381" endtime="20251227 21:01:31.470"/>
+</kw>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${success_locator}</var>
+<arg>success message</arg>
+<arg>id=success-message</arg>
+<arg>id=login-success-notification</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:31.471" level="INFO">🔍 Searching for 'success message' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:31.471" endtime="20251227 21:01:31.471"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=success-message</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<msg timestamp="20251227 21:01:33.831" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-5.png"&gt;&lt;img src="selenium-screenshot-5.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20251227 21:01:33.831" level="FAIL">Element 'id=success-message' not visible after 2 seconds.</msg>
+<status status="FAIL" starttime="20251227 21:01:31.471" endtime="20251227 21:01:33.831"/>
+</kw>
+<msg timestamp="20251227 21:01:33.831" level="INFO">${status} = False</msg>
+<status status="PASS" starttime="20251227 21:01:31.471" endtime="20251227 21:01:33.831"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:33.832" endtime="20251227 21:01:33.832"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="NOT RUN" starttime="20251227 21:01:33.832" endtime="20251227 21:01:33.832"/>
+</return>
+<status status="NOT RUN" starttime="20251227 21:01:33.831" endtime="20251227 21:01:33.832"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:33.832" level="INFO">❌ Strategy 1 failed: id=success-message</msg>
+<status status="PASS" starttime="20251227 21:01:33.832" endtime="20251227 21:01:33.832"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:33.832" endtime="20251227 21:01:33.832"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:33.831" endtime="20251227 21:01:33.832"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:31.471" endtime="20251227 21:01:33.832"/>
+</iter>
+<iter>
+<var name="${index}">2</var>
+<var name="${strategy}">id=login-success-notification</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:33.832" endtime="20251227 21:01:33.841"/>
+</kw>
+<msg timestamp="20251227 21:01:33.841" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:33.832" endtime="20251227 21:01:33.841"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:33.841" level="INFO">✅ Found 'success message' using strategy 2: id=login-success-notification</msg>
+<status status="PASS" starttime="20251227 21:01:33.841" endtime="20251227 21:01:33.842"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:33.842" endtime="20251227 21:01:33.842"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:33.841" endtime="20251227 21:01:33.842"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:33.842" endtime="20251227 21:01:33.842"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:33.842" endtime="20251227 21:01:33.842"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:33.841" endtime="20251227 21:01:33.842"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:33.832" endtime="20251227 21:01:33.842"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:31.471" endtime="20251227 21:01:33.842"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:33.842" endtime="20251227 21:01:33.842"/>
+</kw>
+<msg timestamp="20251227 21:01:33.842" level="INFO">${success_locator} = id=login-success-notification</msg>
+<status status="PASS" starttime="20251227 21:01:31.470" endtime="20251227 21:01:33.842"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${success_locator}</arg>
+<arg>timeout=5s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:33.842" endtime="20251227 21:01:33.850"/>
+</kw>
+<kw name="Element Should Be Visible" library="SeleniumLibrary">
+<arg>${success_locator}</arg>
+<doc>Verifies that the element identified by ``locator`` is visible.</doc>
+<msg timestamp="20251227 21:01:33.857" level="INFO">Element 'id=login-success-notification' is displayed.</msg>
+<status status="PASS" starttime="20251227 21:01:33.850" endtime="20251227 21:01:33.857"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>🎉 SUCCESS: Changed page test completed with healing!</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:33.857" level="INFO">🎉 SUCCESS: Changed page test completed with healing!</msg>
+<status status="PASS" starttime="20251227 21:01:33.857" endtime="20251227 21:01:33.857"/>
+</kw>
+<doc>Test the changed page using self-healing keywords - this is where healing magic happens!</doc>
+<tag>changed-page</tag>
+<tag>self-healing</tag>
+<status status="PASS" starttime="20251227 21:01:22.372" endtime="20251227 21:01:33.857"/>
+</test>
+<test id="s1-t3" name="Compare Normal vs Self Healing Test" line="59">
+<kw name="Log" library="BuiltIn">
+<arg>📊 COMPARISON: Normal vs Self-Healing Approach</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:33.857" level="INFO">📊 COMPARISON: Normal vs Self-Healing Approach</msg>
+<status status="PASS" starttime="20251227 21:01:33.857" endtime="20251227 21:01:33.857"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>============================================================</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:33.858" level="INFO">============================================================</msg>
+<status status="PASS" starttime="20251227 21:01:33.858" endtime="20251227 21:01:33.858"/>
+</kw>
+<kw name="Go To" library="SeleniumLibrary">
+<arg>${CHANGED_PAGE}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20251227 21:01:33.858" level="INFO">Opening url 'file:///Users/r0n01gu/Documents/QA-Automation-Repo/DSAR-CANADA-E2E-Automation/AI-Self-Healing-Tests/test_page_changed.html'</msg>
+<status status="PASS" starttime="20251227 21:01:33.858" endtime="20251227 21:01:33.864"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>🔴 Trying NORMAL approach (should fail)...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:33.864" level="INFO">🔴 Trying NORMAL approach (should fail)...</msg>
+<status status="PASS" starttime="20251227 21:01:33.864" endtime="20251227 21:01:33.864"/>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Input Text</arg>
+<arg>id=email</arg>
+<arg>${TEST_EMAIL}</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>id=email</arg>
+<arg>${TEST_EMAIL}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20251227 21:01:33.865" level="INFO">Typing text 'test@example.com' into text field 'id=email'.</msg>
+<msg timestamp="20251227 21:01:33.946" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-6.png"&gt;&lt;img src="selenium-screenshot-6.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20251227 21:01:33.946" level="FAIL">Element with locator 'id=email' not found.</msg>
+<status status="FAIL" starttime="20251227 21:01:33.864" endtime="20251227 21:01:33.976"/>
+</kw>
+<msg timestamp="20251227 21:01:33.976" level="INFO">${status} = False</msg>
+<status status="PASS" starttime="20251227 21:01:33.864" endtime="20251227 21:01:33.976"/>
+</kw>
+<if>
+<branch type="IF" condition="not ${status}">
+<kw name="Log" library="BuiltIn">
+<arg>❌ NORMAL approach FAILED: Element 'id=email' not found</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:33.976" level="INFO">❌ NORMAL approach FAILED: Element 'id=email' not found</msg>
+<status status="PASS" starttime="20251227 21:01:33.976" endtime="20251227 21:01:33.976"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:33.976" endtime="20251227 21:01:33.976"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:33.976" endtime="20251227 21:01:33.976"/>
+</if>
+<kw name="Log" library="BuiltIn">
+<arg>🟢 Trying SELF-HEALING approach (should succeed)...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:33.976" level="INFO">🟢 Trying SELF-HEALING approach (should succeed)...</msg>
+<status status="PASS" starttime="20251227 21:01:33.976" endtime="20251227 21:01:33.976"/>
+</kw>
+<kw name="Fill Login Form With Healing" library="SelfHealingKeywords">
+<arg>${TEST_EMAIL}</arg>
+<arg>${TEST_PASSWORD}</arg>
+<arg>${TEST_COUNTRY}</arg>
+<doc>Fills entire login form using self-healing</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🎯 Starting self-healing login form fill...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:33.976" level="INFO">🎯 Starting self-healing login form fill...</msg>
+<status status="PASS" starttime="20251227 21:01:33.976" endtime="20251227 21:01:33.976"/>
+</kw>
+<kw name="Heal And Input Text" library="SelfHealingKeywords">
+<arg>email field</arg>
+<arg>${email}</arg>
+<arg>@{EMAIL_STRATEGIES}</arg>
+<doc>Finds element with healing and inputs text</doc>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${locator}</var>
+<arg>${element_name}</arg>
+<arg>@{strategies}</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:33.977" level="INFO">🔍 Searching for 'email field' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:33.977" endtime="20251227 21:01:33.977"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=email</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<msg timestamp="20251227 21:01:36.159" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-7.png"&gt;&lt;img src="selenium-screenshot-7.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20251227 21:01:36.159" level="FAIL">Element 'id=email' not visible after 2 seconds.</msg>
+<status status="FAIL" starttime="20251227 21:01:33.977" endtime="20251227 21:01:36.160"/>
+</kw>
+<msg timestamp="20251227 21:01:36.160" level="INFO">${status} = False</msg>
+<status status="PASS" starttime="20251227 21:01:33.977" endtime="20251227 21:01:36.160"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:36.160" endtime="20251227 21:01:36.160"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="NOT RUN" starttime="20251227 21:01:36.160" endtime="20251227 21:01:36.160"/>
+</return>
+<status status="NOT RUN" starttime="20251227 21:01:36.160" endtime="20251227 21:01:36.160"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:36.160" level="INFO">❌ Strategy 1 failed: id=email</msg>
+<status status="PASS" starttime="20251227 21:01:36.160" endtime="20251227 21:01:36.160"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:36.160" endtime="20251227 21:01:36.160"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:36.160" endtime="20251227 21:01:36.160"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:33.977" endtime="20251227 21:01:36.160"/>
+</iter>
+<iter>
+<var name="${index}">2</var>
+<var name="${strategy}">id=user-email</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:36.160" endtime="20251227 21:01:36.167"/>
+</kw>
+<msg timestamp="20251227 21:01:36.167" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:36.160" endtime="20251227 21:01:36.167"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:36.167" level="INFO">✅ Found 'email field' using strategy 2: id=user-email</msg>
+<status status="PASS" starttime="20251227 21:01:36.167" endtime="20251227 21:01:36.167"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:36.167" endtime="20251227 21:01:36.167"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:36.167" endtime="20251227 21:01:36.167"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:36.167" endtime="20251227 21:01:36.167"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:36.167" endtime="20251227 21:01:36.167"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:36.167" endtime="20251227 21:01:36.167"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:36.160" endtime="20251227 21:01:36.167"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:33.977" endtime="20251227 21:01:36.167"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:36.167" endtime="20251227 21:01:36.167"/>
+</kw>
+<msg timestamp="20251227 21:01:36.167" level="INFO">${locator} = id=user-email</msg>
+<status status="PASS" starttime="20251227 21:01:33.977" endtime="20251227 21:01:36.167"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>${text}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20251227 21:01:36.167" level="INFO">Typing text 'test@example.com' into text field 'id=user-email'.</msg>
+<status status="PASS" starttime="20251227 21:01:36.167" endtime="20251227 21:01:36.198"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>📝 Text entered in '${element_name}': ${text}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:36.198" level="INFO">📝 Text entered in 'email field': test@example.com</msg>
+<status status="PASS" starttime="20251227 21:01:36.198" endtime="20251227 21:01:36.198"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:33.977" endtime="20251227 21:01:36.198"/>
+</kw>
+<kw name="Heal And Input Text" library="SelfHealingKeywords">
+<arg>password field</arg>
+<arg>${password}</arg>
+<arg>@{PASSWORD_STRATEGIES}</arg>
+<doc>Finds element with healing and inputs text</doc>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${locator}</var>
+<arg>${element_name}</arg>
+<arg>@{strategies}</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:36.198" level="INFO">🔍 Searching for 'password field' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:36.198" endtime="20251227 21:01:36.198"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=password</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<msg timestamp="20251227 21:01:38.391" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-8.png"&gt;&lt;img src="selenium-screenshot-8.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20251227 21:01:38.391" level="FAIL">Element 'id=password' not visible after 2 seconds.</msg>
+<status status="FAIL" starttime="20251227 21:01:36.199" endtime="20251227 21:01:38.392"/>
+</kw>
+<msg timestamp="20251227 21:01:38.392" level="INFO">${status} = False</msg>
+<status status="PASS" starttime="20251227 21:01:36.199" endtime="20251227 21:01:38.392"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:38.392" endtime="20251227 21:01:38.392"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="NOT RUN" starttime="20251227 21:01:38.392" endtime="20251227 21:01:38.392"/>
+</return>
+<status status="NOT RUN" starttime="20251227 21:01:38.392" endtime="20251227 21:01:38.392"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:38.392" level="INFO">❌ Strategy 1 failed: id=password</msg>
+<status status="PASS" starttime="20251227 21:01:38.392" endtime="20251227 21:01:38.392"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:38.392" endtime="20251227 21:01:38.392"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:38.392" endtime="20251227 21:01:38.392"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:36.198" endtime="20251227 21:01:38.392"/>
+</iter>
+<iter>
+<var name="${index}">2</var>
+<var name="${strategy}">id=user-password</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:38.392" endtime="20251227 21:01:38.400"/>
+</kw>
+<msg timestamp="20251227 21:01:38.400" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:38.392" endtime="20251227 21:01:38.400"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:38.400" level="INFO">✅ Found 'password field' using strategy 2: id=user-password</msg>
+<status status="PASS" starttime="20251227 21:01:38.400" endtime="20251227 21:01:38.400"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:38.400" endtime="20251227 21:01:38.400"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:38.400" endtime="20251227 21:01:38.400"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:38.400" endtime="20251227 21:01:38.400"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:38.400" endtime="20251227 21:01:38.400"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:38.400" endtime="20251227 21:01:38.400"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:38.392" endtime="20251227 21:01:38.400"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:36.198" endtime="20251227 21:01:38.400"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:38.400" endtime="20251227 21:01:38.400"/>
+</kw>
+<msg timestamp="20251227 21:01:38.400" level="INFO">${locator} = id=user-password</msg>
+<status status="PASS" starttime="20251227 21:01:36.198" endtime="20251227 21:01:38.400"/>
+</kw>
+<kw name="Input Text" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>${text}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20251227 21:01:38.401" level="INFO">Typing text 'password123' into text field 'id=user-password'.</msg>
+<status status="PASS" starttime="20251227 21:01:38.400" endtime="20251227 21:01:38.432"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>📝 Text entered in '${element_name}': ${text}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:38.432" level="INFO">📝 Text entered in 'password field': password123</msg>
+<status status="PASS" starttime="20251227 21:01:38.432" endtime="20251227 21:01:38.432"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:36.198" endtime="20251227 21:01:38.432"/>
+</kw>
+<kw name="Heal And Select From List" library="SelfHealingKeywords">
+<arg>country dropdown</arg>
+<arg>${country}</arg>
+<arg>@{COUNTRY_STRATEGIES}</arg>
+<doc>Finds dropdown with healing and selects option</doc>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${locator}</var>
+<arg>${element_name}</arg>
+<arg>@{strategies}</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:38.432" level="INFO">🔍 Searching for 'country dropdown' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:38.432" endtime="20251227 21:01:38.432"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=country</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<msg timestamp="20251227 21:01:40.610" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-9.png"&gt;&lt;img src="selenium-screenshot-9.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20251227 21:01:40.610" level="FAIL">Element 'id=country' not visible after 2 seconds.</msg>
+<status status="FAIL" starttime="20251227 21:01:38.432" endtime="20251227 21:01:40.610"/>
+</kw>
+<msg timestamp="20251227 21:01:40.610" level="INFO">${status} = False</msg>
+<status status="PASS" starttime="20251227 21:01:38.432" endtime="20251227 21:01:40.610"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:40.610" endtime="20251227 21:01:40.610"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="NOT RUN" starttime="20251227 21:01:40.610" endtime="20251227 21:01:40.610"/>
+</return>
+<status status="NOT RUN" starttime="20251227 21:01:40.610" endtime="20251227 21:01:40.610"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:40.611" level="INFO">❌ Strategy 1 failed: id=country</msg>
+<status status="PASS" starttime="20251227 21:01:40.610" endtime="20251227 21:01:40.611"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:40.610" endtime="20251227 21:01:40.611"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:40.610" endtime="20251227 21:01:40.611"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:38.432" endtime="20251227 21:01:40.611"/>
+</iter>
+<iter>
+<var name="${index}">2</var>
+<var name="${strategy}">id=user-country</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:40.611" endtime="20251227 21:01:40.618"/>
+</kw>
+<msg timestamp="20251227 21:01:40.618" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:40.611" endtime="20251227 21:01:40.618"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:40.619" level="INFO">✅ Found 'country dropdown' using strategy 2: id=user-country</msg>
+<status status="PASS" starttime="20251227 21:01:40.618" endtime="20251227 21:01:40.619"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:40.619" endtime="20251227 21:01:40.619"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:40.618" endtime="20251227 21:01:40.619"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:40.619" endtime="20251227 21:01:40.619"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:40.619" endtime="20251227 21:01:40.619"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:40.618" endtime="20251227 21:01:40.619"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:40.611" endtime="20251227 21:01:40.619"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:38.432" endtime="20251227 21:01:40.619"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:40.619" endtime="20251227 21:01:40.619"/>
+</kw>
+<msg timestamp="20251227 21:01:40.619" level="INFO">${locator} = id=user-country</msg>
+<status status="PASS" starttime="20251227 21:01:38.432" endtime="20251227 21:01:40.619"/>
+</kw>
+<kw name="Select From List By Value" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<arg>${value}</arg>
+<doc>Selects options from selection list ``locator`` by ``values``.</doc>
+<msg timestamp="20251227 21:01:40.619" level="INFO">Selecting options from selection list 'id=user-country' by value us.</msg>
+<status status="PASS" starttime="20251227 21:01:40.619" endtime="20251227 21:01:40.644"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>🔽 Selected '${value}' in '${element_name}'</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:40.644" level="INFO">🔽 Selected 'us' in 'country dropdown'</msg>
+<status status="PASS" starttime="20251227 21:01:40.644" endtime="20251227 21:01:40.644"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:38.432" endtime="20251227 21:01:40.644"/>
+</kw>
+<kw name="Heal And Click Element" library="SelfHealingKeywords">
+<arg>submit button</arg>
+<arg>@{SUBMIT_STRATEGIES}</arg>
+<doc>Finds element with healing and clicks it</doc>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${locator}</var>
+<arg>${element_name}</arg>
+<arg>@{strategies}</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:40.644" level="INFO">🔍 Searching for 'submit button' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:40.644" endtime="20251227 21:01:40.644"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=submit-btn</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<msg timestamp="20251227 21:01:42.852" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-10.png"&gt;&lt;img src="selenium-screenshot-10.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20251227 21:01:42.852" level="FAIL">Element 'id=submit-btn' not visible after 2 seconds.</msg>
+<status status="FAIL" starttime="20251227 21:01:40.644" endtime="20251227 21:01:42.852"/>
+</kw>
+<msg timestamp="20251227 21:01:42.852" level="INFO">${status} = False</msg>
+<status status="PASS" starttime="20251227 21:01:40.644" endtime="20251227 21:01:42.852"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:42.852" endtime="20251227 21:01:42.852"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="NOT RUN" starttime="20251227 21:01:42.852" endtime="20251227 21:01:42.852"/>
+</return>
+<status status="NOT RUN" starttime="20251227 21:01:42.852" endtime="20251227 21:01:42.852"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:42.852" level="INFO">❌ Strategy 1 failed: id=submit-btn</msg>
+<status status="PASS" starttime="20251227 21:01:42.852" endtime="20251227 21:01:42.852"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:42.852" endtime="20251227 21:01:42.852"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:42.852" endtime="20251227 21:01:42.852"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:40.644" endtime="20251227 21:01:42.852"/>
+</iter>
+<iter>
+<var name="${index}">2</var>
+<var name="${strategy}">id=login-submit-button</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:42.853" endtime="20251227 21:01:42.860"/>
+</kw>
+<msg timestamp="20251227 21:01:42.860" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:42.852" endtime="20251227 21:01:42.860"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:42.860" level="INFO">✅ Found 'submit button' using strategy 2: id=login-submit-button</msg>
+<status status="PASS" starttime="20251227 21:01:42.860" endtime="20251227 21:01:42.860"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:42.860" endtime="20251227 21:01:42.860"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:42.860" endtime="20251227 21:01:42.860"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:42.860" endtime="20251227 21:01:42.860"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:42.860" endtime="20251227 21:01:42.860"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:42.860" endtime="20251227 21:01:42.860"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:42.852" endtime="20251227 21:01:42.860"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:40.644" endtime="20251227 21:01:42.860"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:42.860" endtime="20251227 21:01:42.860"/>
+</kw>
+<msg timestamp="20251227 21:01:42.860" level="INFO">${locator} = id=login-submit-button</msg>
+<status status="PASS" starttime="20251227 21:01:40.644" endtime="20251227 21:01:42.860"/>
+</kw>
+<kw name="Click Element" library="SeleniumLibrary">
+<arg>${locator}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<msg timestamp="20251227 21:01:42.860" level="INFO">Clicking element 'id=login-submit-button'.</msg>
+<status status="PASS" starttime="20251227 21:01:42.860" endtime="20251227 21:01:42.882"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>🖱️ Clicked '${element_name}'</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:42.882" level="INFO">🖱️ Clicked 'submit button'</msg>
+<status status="PASS" starttime="20251227 21:01:42.882" endtime="20251227 21:01:42.882"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:40.644" endtime="20251227 21:01:42.882"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>🎉 Login form filled successfully with self-healing!</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:42.883" level="INFO">🎉 Login form filled successfully with self-healing!</msg>
+<status status="PASS" starttime="20251227 21:01:42.882" endtime="20251227 21:01:42.883"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:33.976" endtime="20251227 21:01:42.883"/>
+</kw>
+<kw name="Find Element With Healing" library="SelfHealingKeywords">
+<var>${success_locator}</var>
+<arg>success message</arg>
+<arg>id=success-message</arg>
+<arg>id=login-success-notification</arg>
+<doc>Finds an element using multiple fallback strategies</doc>
+<kw name="Log" library="BuiltIn">
+<arg>🔍 Searching for '${element_name}' with healing...</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:42.883" level="INFO">🔍 Searching for 'success message' with healing...</msg>
+<status status="PASS" starttime="20251227 21:01:42.883" endtime="20251227 21:01:42.883"/>
+</kw>
+<for flavor="IN ENUMERATE">
+<var>${index}</var>
+<var>${strategy}</var>
+<value>@{strategies}</value>
+<value>start=1</value>
+<iter>
+<var name="${index}">1</var>
+<var name="${strategy}">id=success-message</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<msg timestamp="20251227 21:01:45.061" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-11.png"&gt;&lt;img src="selenium-screenshot-11.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg timestamp="20251227 21:01:45.061" level="FAIL">Element 'id=success-message' not visible after 2 seconds.</msg>
+<status status="FAIL" starttime="20251227 21:01:42.883" endtime="20251227 21:01:45.061"/>
+</kw>
+<msg timestamp="20251227 21:01:45.061" level="INFO">${status} = False</msg>
+<status status="PASS" starttime="20251227 21:01:42.883" endtime="20251227 21:01:45.061"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:45.061" endtime="20251227 21:01:45.061"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="NOT RUN" starttime="20251227 21:01:45.061" endtime="20251227 21:01:45.061"/>
+</return>
+<status status="NOT RUN" starttime="20251227 21:01:45.061" endtime="20251227 21:01:45.061"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:45.061" level="INFO">❌ Strategy 1 failed: id=success-message</msg>
+<status status="PASS" starttime="20251227 21:01:45.061" endtime="20251227 21:01:45.061"/>
+</kw>
+<status status="PASS" starttime="20251227 21:01:45.061" endtime="20251227 21:01:45.061"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:45.061" endtime="20251227 21:01:45.061"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:42.883" endtime="20251227 21:01:45.061"/>
+</iter>
+<iter>
+<var name="${index}">2</var>
+<var name="${strategy}">id=login-success-notification</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${status}</var>
+<arg>Wait Until Element Is Visible</arg>
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${strategy}</arg>
+<arg>timeout=2s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:45.061" endtime="20251227 21:01:45.069"/>
+</kw>
+<msg timestamp="20251227 21:01:45.069" level="INFO">${status} = True</msg>
+<status status="PASS" starttime="20251227 21:01:45.061" endtime="20251227 21:01:45.069"/>
+</kw>
+<if>
+<branch type="IF" condition="${status}">
+<kw name="Log" library="BuiltIn">
+<arg>✅ Found '${element_name}' using strategy ${index}: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:45.069" level="INFO">✅ Found 'success message' using strategy 2: id=login-success-notification</msg>
+<status status="PASS" starttime="20251227 21:01:45.069" endtime="20251227 21:01:45.069"/>
+</kw>
+<return>
+<value>${strategy}</value>
+<status status="PASS" starttime="20251227 21:01:45.069" endtime="20251227 21:01:45.069"/>
+</return>
+<status status="PASS" starttime="20251227 21:01:45.069" endtime="20251227 21:01:45.069"/>
+</branch>
+<branch type="ELSE">
+<kw name="Log" library="BuiltIn">
+<arg>❌ Strategy ${index} failed: ${strategy}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:45.069" endtime="20251227 21:01:45.069"/>
+</kw>
+<status status="NOT RUN" starttime="20251227 21:01:45.069" endtime="20251227 21:01:45.069"/>
+</branch>
+<status status="PASS" starttime="20251227 21:01:45.069" endtime="20251227 21:01:45.069"/>
+</if>
+<status status="PASS" starttime="20251227 21:01:45.061" endtime="20251227 21:01:45.069"/>
+</iter>
+<status status="PASS" starttime="20251227 21:01:42.883" endtime="20251227 21:01:45.069"/>
+</for>
+<kw name="Fail" library="BuiltIn">
+<arg>💥 All healing strategies failed for '${element_name}'</arg>
+<doc>Fails the test with the given message and optionally alters its tags.</doc>
+<status status="NOT RUN" starttime="20251227 21:01:45.069" endtime="20251227 21:01:45.069"/>
+</kw>
+<msg timestamp="20251227 21:01:45.069" level="INFO">${success_locator} = id=login-success-notification</msg>
+<status status="PASS" starttime="20251227 21:01:42.883" endtime="20251227 21:01:45.069"/>
+</kw>
+<kw name="Wait Until Element Is Visible" library="SeleniumLibrary">
+<arg>${success_locator}</arg>
+<arg>timeout=5s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" starttime="20251227 21:01:45.069" endtime="20251227 21:01:45.077"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>🎯 RESULT: Self-healing succeeded where normal approach failed!</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20251227 21:01:45.077" level="INFO">🎯 RESULT: Self-healing succeeded where normal approach failed!</msg>
+<status status="PASS" starttime="20251227 21:01:45.077" endtime="20251227 21:01:45.077"/>
+</kw>
+<doc>Demonstrates the difference between normal and self-healing approaches</doc>
+<tag>comparison</tag>
+<tag>demo</tag>
+<status status="PASS" starttime="20251227 21:01:33.857" endtime="20251227 21:01:45.077"/>
+</test>
+<kw name="Close Browser" library="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20251227 21:01:45.077" endtime="20251227 21:01:45.296"/>
+</kw>
+<doc>Self-Healing Robot Framework Test Example
+This demonstrates how to write tests that heal themselves when elements change</doc>
+<status status="PASS" starttime="20251227 21:01:16.086" endtime="20251227 21:01:45.296"/>
+</suite>
+<statistics>
+<total>
+<stat pass="3" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">changed-page</stat>
+<stat pass="1" fail="0" skip="0">comparison</stat>
+<stat pass="1" fail="0" skip="0">demo</stat>
+<stat pass="1" fail="0" skip="0">original-page</stat>
+<stat pass="2" fail="0" skip="0">self-healing</stat>
+</tag>
+<suite>
+<stat pass="3" fail="0" skip="0" id="s1" name="SelfHealingTests">SelfHealingTests</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20251227 21:01:19.947" level="WARN">The chromedriver version (142.0.7444.59) detected in PATH at /usr/local/bin/chromedriver might not be compatible with the detected chrome version (143.0.7499.169); currently, chromedriver 143.0.7499.169 is recommended for chrome 143.*, so it is advised to delete the driver in PATH and retry</msg>
+</errors>
+</robot>

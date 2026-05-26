@@ -1,0 +1,19 @@
+# AI Self-Healing Configuration
+# Based on Walmart Corporate AI Gateway specifications
+
+ai_config:
+  corporate_endpoints:
+    - https://wmtllmgateway.stage.walmart.com/wmtllmgateway/openai/deployments/gpt-4o/chat/completions
+  headers:
+    api_version: 2024-02-15-preview
+    consumer_id: SelfHealingFramework-QA
+    service_env: stage
+    service_name: WMTLLMGATEWAY
+    user_agent: SelfHealingFramework-QA/1.0
+  models:
+    - gpt-4o
+  openai_api_key: eyJzZ252ZXIiOiIxIiwiYWxnIjoiSFMyNTYiLCJ0eXAiOiJKV1QifQ.eyJqdGkiOiIxMTA5MiIsInN1YiI6IjE3IiwiaXNzIjoiV01UTExNR0FURVdBWS1TVEciLCJhY3QiOiJyMG4wMWd1IiwidHlwZSI6IlVTUiIsImlhdCI6MTc2ODkxNzU2MiwiZXhwIjoxNzc0MTAxNTYyfQ.n9lfkbdUjrkNQEit3VxUGoTBKMLrFsJw6eELs05zMZ4
+  request_settings:
+    max_tokens: 300
+    temperature: 0.1
+    timeout: 30

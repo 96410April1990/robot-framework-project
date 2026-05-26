@@ -1,0 +1,8 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","3566","test_login_with_invalid_credentials","tests","2026-05-12","passed","2026-05-12","TestAwSmokeTests","AwSmokeTests","",""
+"","6974","test_asset_continue_development_feature","tests","2026-05-12","passed","2026-05-12","TestAwSmokeTests","AwSmokeTests","",""
+"","8648","test_ready_to_go_live_list_feature","tests","2026-05-12","passed","2026-05-12","TestAwSmokeTests","AwSmokeTests","",""
+"","6428","test_asset_review_and_approve_feature","tests","2026-05-12","passed","2026-05-12","TestAwSmokeTests","AwSmokeTests","",""
+"","8971","test_development_list_feature","tests","2026-05-12","passed","2026-05-12","TestAwSmokeTests","AwSmokeTests","",""
+"","9158","test_integration_list_feature","tests","2026-05-12","passed","2026-05-12","TestAwSmokeTests","AwSmokeTests","",""
+"","5195","test_snapshot_feature","tests","2026-05-12","passed","2026-05-12","TestAwSmokeTests","AwSmokeTests","",""
