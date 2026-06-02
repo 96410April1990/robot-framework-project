@@ -7,4 +7,4 @@ def convert_pdf_to_docx(pdf_file, docx_file):
 
 #convert_pdf_to_docx('/Users/r0n01gu/Documents/TM/Agenda/Meeting No. 931 Agenda.pdf', '/Users/r0n01gu/Documents/TM/Agenda/Meeting-No.932-Agenda.docx')
 
-convert_pdf_to_docx('/Users/r0n01gu/Downloads/Resume-Rohith-N-Updated.pdf', '/Users/r0n01gu/Downloads/Resume-Rohith-N-Updated.docx')
+convert_pdf_to_docx('/Users/r0n01gu/Downloads/Resume-Rohith-N-Updated.pdf', '/Users/r0n01gu/Downloads/Resume-Rohith-N-Updated-Two.docx')
