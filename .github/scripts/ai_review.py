@@ -14,9 +14,10 @@ import sys
 import json
 import requests
 from github import Github
+import importlib
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 TOKEN_GITHUB = os.getenv("TOKEN_GITHUB")
 # Support either SLACK_WEBHOOK_URL or legacy SLACK_WEBHOOK
@@ -41,11 +42,20 @@ def gather_diff(repo, pr_number):
     return "\n\n".join(diffs), pr
 
 def ask_gemini(prompt):
-    """Call Google Generative Language (Gemini) REST endpoint using API key.
-    This expects `GEMINI_API_KEY` and `GEMINI_MODEL` to be set.
-    """
+    """Prefer using the project's gemini client if available, otherwise call REST endpoint."""
+    # Try to import the local gemini client from playwright/utils
+    try:
+        repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+        if repo_root not in sys.path:
+            sys.path.insert(0, repo_root)
+        gemini_mod = importlib.import_module('playwright.utils.gemini_client')
+        if hasattr(gemini_mod, 'ask_gemini'):
+            return gemini_mod.ask_gemini(prompt)
+    except Exception:
+        # fallback to direct REST call below
+        pass
+
     model = GEMINI_MODEL
-    # Normalize model to resource path if needed (e.g., 'gemini-1.5-flash' -> 'models/gemini-1.5-flash')
     if model and not model.startswith("models/"):
         model = f"models/{model}"
     url = f"https://generativelanguage.googleapis.com/v1beta2/{model}:generateText?key={GEMINI_API_KEY}"
@@ -58,12 +68,9 @@ def ask_gemini(prompt):
     resp = requests.post(url, headers=headers, data=json.dumps(payload), timeout=60)
     resp.raise_for_status()
     j = resp.json()
-    # Response shape may vary; try common patterns
     if isinstance(j, dict):
-        # text-bison style
         if "candidates" in j and len(j["candidates"]) > 0 and "content" in j["candidates"][0]:
             return j["candidates"][0]["content"].strip()
-        # some APIs return 'output' with 'content'
         if "output" in j:
             out = j["output"]
             if isinstance(out, list) and len(out) > 0 and "content" in out[0]:

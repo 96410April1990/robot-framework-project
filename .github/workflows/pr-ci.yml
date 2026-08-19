@@ -67,7 +67,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install ai-review dependencies
-        run: python -m pip install --upgrade pip && pip install PyGithub openai requests slack-sdk
+        run: python -m pip install --upgrade pip && pip install PyGithub openai requests slack-sdk google-generativeai python-dotenv
 
       - name: Run AI review script
         env:
