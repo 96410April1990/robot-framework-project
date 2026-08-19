@@ -143,6 +143,7 @@ def main():
         review_text = f"AI review failed: {e}"
 
     comment_body = "## Automated AI Code Review\n\n" + review_text
+    print(comment_body)
     print("Posting comment to PR...")
     post_pr_comment(pr, comment_body)
 
