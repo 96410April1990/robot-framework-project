@@ -128,15 +128,10 @@ def main():
         return
 
     prompt = (
-        "You are an expert software engineer and security reviewer. Review the git diff and RETURN ONLY the major, high-impact findings that affect security, correctness, reliability, or release readiness. Ignore stylistic, formatting, and minor style suggestions unless they cause correctness or security issues.\n\n"
-        "Output requirements (strict):\n"
-        "- Start with a prioritized list (max 3) of Critical/High issues.\n"
-        "- For each finding include: Severity (Critical/High/Medium), one-line title, one-line description, 1-3 concrete remediation steps.\n"
-        "- Provide minimal code snippets ONLY for Critical or High issues (show only the changed lines with filename and context).\n"
-        "- Do NOT list low-impact or purely stylistic items.\n"
-        "- Limit total output to ~800 words.\n\n"
-        "Then, if any Medium issues exist, list them briefly under a separate heading.\n"
-        "Finish with a one-line summary: either 'Ready to apply fixes' or 'No major issues found'.\n\n"
+        "Review the following git diff and provide:\n"
+        "1) Brief summary of potential coding-style / standards issues.\n"
+        "2) Security or correctness concerns and suggested fixes.\n"
+        "3) Concrete code suggestions (show the minimal corrected snippet where applicable).\n\n"
         "Diff:\n" + diffs
     )
 
