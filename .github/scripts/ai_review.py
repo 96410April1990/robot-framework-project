@@ -116,6 +116,65 @@ def ask_ai(prompt):
 def post_pr_comment(pr, body):
     pr.create_issue_comment(body)
 
+
+def post_inline_comments(pr, review_text):
+    """Post lightweight inline review comments on files mentioned in the AI review.
+    For each file in the PR that is referenced by name in the review_text, add a
+    single comment at the first added/changed line in the patch. This is best-effort
+    and avoids creating noisy comments for files not mentioned by the AI output.
+    """
+    try:
+        commits = list(pr.get_commits())
+        if not commits:
+            return
+        last_sha = commits[-1].sha
+        files = list(pr.get_files())
+        comments = []
+        for f in files:
+            # Only comment on files that the AI review mentions
+            if f.filename not in review_text:
+                continue
+            patch = f.patch or ""
+            if not patch:
+                continue
+            # find first added line in the patch and use its position in the diff
+            pos = None
+            pos_counter = 0
+            for ln in patch.splitlines():
+                pos_counter += 1
+                # skip file header lines like '+++'
+                if ln.startswith('+++') or ln.startswith('---'):
+                    continue
+                if ln.startswith('+') and not ln.startswith('+++'):
+                    pos = pos_counter
+                    break
+            if pos is None:
+                continue
+            body = (
+                "Automated AI reviewer: the main review found a potential high-impact issue in this file.\n"
+                "See the top-level AI review comment for details and remediation steps."
+            )
+            comments.append({
+                'path': f.filename,
+                'position': pos,
+                'body': body,
+            })
+
+        if comments:
+            # Create a single review containing all inline comments
+            try:
+                pr.create_review(body="Automated AI inline comments.", event="COMMENT", comments=comments)
+            except Exception:
+                # Older PyGithub versions may not accept 'comments' in create_review; fallback per-file
+                for c in comments:
+                    try:
+                        pr.create_review_comment(c['body'], last_sha, c['path'], c['position'])
+                    except Exception:
+                        # give up on this file but continue
+                        continue
+    except Exception as e:
+        print(f"Inline comment posting failed: {e}")
+
 def post_slack_message(webhook, text):
     try:
         requests.post(webhook, json={"text": text}, timeout=10)
@@ -129,10 +188,15 @@ def main():
         return
 
     prompt = (
-        "Review the following git diff and provide:\n"
-        "1) Brief summary of potential coding-style / standards issues.\n"
-        "2) Security or correctness concerns and suggested fixes.\n"
-        "3) Concrete code suggestions (show the minimal corrected snippet where applicable).\n\n"
+        "You are an expert software engineer and security reviewer. Review the git diff and RETURN ONLY the major, high-impact findings that affect security, correctness, reliability, or release readiness. Ignore stylistic, formatting, and minor style suggestions unless they cause correctness or security issues.\n\n"
+        "Output requirements (strict):\n"
+        "- Start with a prioritized list (max 3) of Critical/High issues.\n"
+        "- For each finding include: Severity (Critical/High/Medium), one-line title, one-line description, 1-3 concrete remediation steps.\n"
+        "- Provide minimal code snippets ONLY for Critical or High issues (show only the changed lines with filename and context).\n"
+        "- Do NOT list low-impact or purely stylistic items.\n"
+        "- Limit total output to ~800 words.\n\n"
+        "Then, if any Medium issues exist, list them briefly under a separate heading.\n"
+        "Finish with a one-line summary: either 'Ready to apply fixes' or 'No major issues found'.\n\n"
         "Diff:\n" + diffs
     )
 
@@ -146,6 +210,12 @@ def main():
     print(comment_body)
     print("Posting comment to PR...")
     post_pr_comment(pr, comment_body)
+
+    # Post lightweight inline comments for any files the AI mentioned
+    try:
+        post_inline_comments(pr, review_text)
+    except Exception as e:
+        print(f"Posting inline comments failed: {e}")
 
     if SLACK_WEBHOOK:
         slack_text = f"AI Review posted for PR #{PR_NUMBER} in {REPO}:\n{review_text[:1500]}"
