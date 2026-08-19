@@ -1,6 +1,7 @@
 class PracticeTestLoginLocators:
     LOGIN_PAGE = "//a[contains(text(),'Test Login Page')]"
-    USER_NAME_INPUT = "#username"
+    #USER_NAME_INPUT = "#username"
+    USER_NAME_INPUT = "#user-name-test"
     LOGIN_PASSWORD_INPUT = "#password"
     SIGNIN_SUBMIT_BUTTON = "xpath=//button[@id='submit']"
     INVALID_USERNAME_MSG = "xpath=//div[contains(text(),'Your username is invalid!')]"

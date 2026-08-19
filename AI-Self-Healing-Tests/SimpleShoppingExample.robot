@@ -26,11 +26,12 @@ ${QUANTITY}         2
 ${SHOP_ORIGINAL}     file://${CURDIR}/shop_page.html
 ${SHOP_CHANGED}      file://${CURDIR}/shop_page_changed.html
 
-# Real AI Configuration (Walmart Corporate Infrastructure)
-${AI_ENDPOINT}       https://wmtllmgateway.stage.walmart.com/wmtllmgateway/openai/deployments/gpt-4o/chat/completions
-${AI_MODEL}          gpt-4o
+# Google Vertex AI Gemini Configuration
+${AI_ENDPOINT}       https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent
+${AI_MODEL}          gemini-1.5-flash
 ${AI_MAX_TOKENS}     200
 ${AI_TEMPERATURE}    0.1
+${VERTEX_AI_API_KEY}    ${EMPTY}  # Will be loaded from gemini_config.py
 
 *** Test Cases ***
 Simple Shopping Test - Original Page
@@ -103,19 +104,19 @@ AI-Powered Shopping Test
         Log    ⚠️ AI could not locate success message    console=True
     END
 
-REAL AI Shopping Test - Walmart Corporate Integration
-    [Documentation]    Uses actual Walmart AI Gateway for intelligent element detection
-    [Tags]    shopping    real-ai    corporate-integration
+REAL AI Shopping Test - Google Gemini Integration
+    [Documentation]    Uses Vertex AI Gemini API for intelligent element detection
+    [Tags]    shopping    real-ai    vertex-ai-integration
     
-    Log    🏢 REAL AI SHOPPING TEST - Walmart Corporate Integration    console=True
+    Log    🏢 REAL AI SHOPPING TEST - Vertex AI Gemini Integration    console=True
     Log    ================================================================    console=True
-    Log    🤖 Using actual Walmart AI Gateway with JWT authentication    console=True
+    Log    🤖 Using Google Vertex AI with Gemini model    console=True
     
-    # Check if real AI is configured
-    ${ai_configured}    Check Real AI Configuration
+    # Check if Gemini AI is configured
+    ${ai_configured}    Check Gemini Configuration
     IF    not ${ai_configured}
-        Log    ⚠️ Real AI not configured - using demo mode    console=True
-        Skip    Real AI test requires valid JWT token configuration
+        Log    ⚠️ Gemini API not configured - using demo mode    console=True
+        Skip    Gemini API test requires valid API key configuration
     END
     
     # Go to changed page that will challenge the AI
@@ -143,18 +144,20 @@ REAL AI Shopping Test - Walmart Corporate Integration
 
 *** Keywords ***
 Setup Test Environment
-    [Documentation]    Sets up test environment and loads configuration
+    [Documentation]    Sets up test environment and loads Vertex AI configuration
     
-    # Load AI configuration from config.py
-    ${config_exists}    Run Keyword And Return Status    File Should Exist    ${CURDIR}/config.py
+    # Load Vertex AI configuration from gemini_config.py
+    ${config_exists}    Run Keyword And Return Status    File Should Exist    ${CURDIR}/gemini_config.py
     IF    ${config_exists}
-        Log    📋 Loading AI configuration from config.py    console=True
-        ${config_status}    Check Real AI Configuration
+        Log    📋 Loading Vertex AI Gemini configuration    console=True
+        ${config_status}    Check Gemini Configuration
         IF    ${config_status}
-            Log    ✅ Real AI configuration loaded successfully    console=True
+            Log    ✅ Vertex AI API configured successfully    console=True
         ELSE
-            Log    ⚠️ Running in demo mode - real AI not configured    console=True
+            Log    ⚠️ Vertex AI API key not configured - tests will fail    console=True
         END
+    ELSE
+        Log    ⚠️ gemini_config.py not found!    console=True
     END
     
     # Open browser
@@ -263,124 +266,150 @@ AI Find Success Message
     
     RETURN    ${False}
 
-Check Real AI Configuration
-    [Documentation]    Tests if real AI is properly configured by making a test call
+Check Gemini Configuration
+    [Documentation]    Tests if Vertex AI is properly configured
     
-    # Import config.py to get AI configuration
-    ${config_data}    Evaluate    
-    ...    exec(open('${CURDIR}/config.py').read()) or AI_CONFIG
-    ...    modules=sys
-    
-    ${current_token}    Get From Dictionary    ${config_data}    api_key
-    
-    # Test the token by making a simple API call
-    Log    🧪 Testing AI Gateway connection...    console=True
-    
-    # For now, let's assume the token is valid and try to use it
-    # In a real environment, you'd test with a simple API call first
-    ${token_length}    Get Length    ${current_token}
-    
-    IF    ${token_length} > 50
-        Log    ✅ JWT token found - attempting real AI connection    console=True
-        RETURN    ${True}
-    ELSE
-        Log    ⚠️ No valid JWT token configured    console=True
+    TRY
+        # Import gemini_config.py to get API configuration
+        ${config_data}    Evaluate    
+        ...    exec(open('${CURDIR}/gemini_config.py').read()) or GEMINI_CONFIG
+        ...    modules=sys
+        
+        ${api_key}    Get From Dictionary    ${config_data}    api_key
+        
+        # Test if API key is valid
+        Log    🧪 Testing Vertex AI connection...    console=True
+        
+        ${key_length}    Get Length    ${api_key}
+        
+        IF    ${key_length} > 20 and "AQ." in "${api_key}"
+            Log    ✅ Valid Vertex AI API key found!    console=True
+            RETURN    ${True}
+        ELSE
+            Log    ⚠️ Invalid or placeholder API key configured    console=True
+            RETURN    ${False}
+        END
+        
+    EXCEPT    AS    ${error}
+        Log    ⚠️ Error checking Vertex AI configuration: ${error}    console=True
         RETURN    ${False}
     END
 
 Real AI Find Element
-    [Documentation]    Uses actual Walmart AI Gateway to find page elements
+    [Documentation]    Uses Vertex AI Gemini API to find page elements
     [Arguments]    ${element_description}
     
-    Log    🤖 REAL AI: Analyzing page for ${element_description}    console=True
+    Log    🤖 VERTEX AI: Analyzing page for ${element_description}    console=True
     
     # Get current page source for AI analysis
     ${page_source}    Get Source
     ${page_title}    Get Title
     ${current_url}    Get Location
     
+    # Limit page source to avoid token limits (first 2000 chars)
+    ${truncated_source}    Evaluate    "${page_source}"[:2000]
+    
     # Create AI prompt for element analysis
     ${ai_prompt}    Set Variable    
-    ...    You are a web automation expert. Analyze this HTML page and suggest 3-5 CSS selectors or XPath expressions to find a "${element_description}".
+    ...    You are a web automation expert. Analyze this HTML and suggest 5 CSS selectors or XPath to find "${element_description}".
     ...    
-    ...    Page Context:
-    ...    - URL: ${current_url}
-    ...    - Title: ${page_title}
-    ...    - Task: Find ${element_description}
+    ...    Page: ${page_title}
+    ...    URL: ${current_url}
     ...    
-    ...    HTML Source:
-    ...    ${page_source}
+    ...    HTML: ${truncated_source}
     ...    
-    ...    Return only the selectors, one per line, in order of reliability. Use formats like:
-    ...    id=element-id
+    ...    Return ONLY selectors, one per line:
     ...    css=.class-name
-    ...    xpath=//element[@attribute='value']
+    ...    xpath=//element[@attr='value']
+    ...    id=element-id
     
-    # Get AI suggestions from Walmart Corporate AI
-    ${ai_suggestions}    Call Walmart AI Gateway    ${ai_prompt}
+    # Get AI suggestions from Vertex AI
+    ${ai_suggestions}    Call Gemini API    ${ai_prompt}
     
     # Try each AI suggestion
     FOR    ${suggestion}    IN    @{ai_suggestions}
         ${suggestion}    Strip String    ${suggestion}
         Continue For Loop If    "${suggestion}" == ""
         
-        Log    🧠 Trying AI suggestion: ${suggestion}    console=True
+        Log    🧠 Trying Vertex AI suggestion: ${suggestion}    console=True
         ${found}    Run Keyword And Return Status    Wait Until Element Is Visible    ${suggestion}    timeout=2s
         IF    ${found}
-            Log    🎯 REAL AI SUCCESS: Found element using ${suggestion}    console=True
+            Log    🎯 VERTEX AI SUCCESS: Found element using ${suggestion}    console=True
             RETURN    ${suggestion}
         ELSE
-            Log    ❌ AI suggestion failed: ${suggestion}    console=True
+            Log    ❌ Suggestion failed: ${suggestion}    console=True
         END
     END
     
-    Fail    🤖 REAL AI could not find element: ${element_description}
+    Fail    🤖 Vertex AI could not find element: ${element_description}
 
-Call Walmart AI Gateway
-    [Documentation]    Makes actual API call to Walmart's AI Gateway with proper headers
+Call Gemini API
+    [Documentation]    Makes API call to Vertex AI Gemini for element analysis
     [Arguments]    ${prompt}
     
-    Log    🏢 Calling Walmart AI Gateway with proper configuration...    console=True
+    Log    🤖 Calling Vertex AI Gemini API...    console=True
     
     TRY
-        # Load JWT token from config
+        # Load API key from config
         ${config_data}    Evaluate    
-        ...    exec(open('${CURDIR}/config.py').read()) or AI_CONFIG
+        ...    exec(open('${CURDIR}/gemini_config.py').read()) or GEMINI_CONFIG
         ...    modules=sys
-        ${jwt_token}    Get From Dictionary    ${config_data}    api_key
+        ${api_key}    Get From Dictionary    ${config_data}    api_key
         
-        Log    🔑 JWT token loaded, making API call...    console=True
+        Log    🔑 API key loaded, calling Vertex AI...    console=True
         
-        # Use proper Walmart AI Gateway configuration
+        # Make API call to Vertex AI Gemini endpoint
         ${ai_response}    Evaluate    
-        ...    __import__('requests').post('https://wmtllmgateway.stage.walmart.com/wmtllmgateway/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview', headers={'Authorization': 'Bearer ${jwt_token}', 'Content-Type': 'application/json', 'consumer-id': 'SelfHealingFramework-QA', 'service-env': 'stage', 'service-name': 'WMTLLMGATEWAY', 'User-Agent': 'SelfHealingFramework-QA/1.0'}, json={'messages': [{'role': 'user', 'content': r'''${prompt}'''}], 'max_tokens': 150, 'temperature': 0.1}, verify=False, timeout=30).json()
+        ...    __import__('requests').post('https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${api_key}', headers={'Content-Type': 'application/json'}, json={'contents': [{'parts': [{'text': r'''${prompt}'''}]}], 'generationConfig': {'maxOutputTokens': 200, 'temperature': 0.1}}, timeout=30).json()
         ...    modules=requests
         
-        Log    📡 AI Gateway response received    console=True
+        Log    📡 Vertex AI response received    console=True
         
-        # Extract AI response text with error checking
-        ${has_choices}    Run Keyword And Return Status    Dictionary Should Contain Key    ${ai_response}    choices
-        IF    not ${has_choices}
-            Log    ❌ AI response missing 'choices' field: ${ai_response}    console=True
-            # Return fallback selectors
-            ${fallback_selectors}    Create List    css=input[type="text"]    css=button    xpath=//input    xpath=//button
-            RETURN    ${fallback_selectors}
+        # Extract response - Vertex AI returns candidates in a different format
+        ${has_candidates}    Run Keyword And Return Status    Dictionary Should Contain Key    ${ai_response}    candidates
+        IF    ${has_candidates}
+            # Standard Gemini API format
+            Log    📡 Using standard Gemini response format    console=True
+            ${candidates}    Get From Dictionary    ${ai_response}    candidates
+            ${candidates_length}    Get Length    ${candidates}
+            IF    ${candidates_length} == 0
+                Log    ❌ Empty candidates array    console=True
+                ${fallback_selectors}    Create List    css=input[type="text"]    css=button    xpath=//input    xpath=//button
+                RETURN    ${fallback_selectors}
+            END
+            ${first_candidate}    Set Variable    ${candidates}[0]
+            ${content}    Get From Dictionary    ${first_candidate}    content
+            ${parts}    Get From Dictionary    ${content}    parts
+            ${first_part}    Set Variable    ${parts}[0]
+            ${ai_text}    Get From Dictionary    ${first_part}    text
+        ELSE
+            # Check for Vertex AI specific response format
+            ${has_predictions}    Run Keyword And Return Status    Dictionary Should Contain Key    ${ai_response}    predictions
+            IF    ${has_predictions}
+                Log    📡 Using Vertex AI response format    console=True
+                ${predictions}    Get From Dictionary    ${ai_response}    predictions
+                ${pred_length}    Get Length    ${predictions}
+                IF    ${pred_length} == 0
+                    Log    ❌ Empty predictions array    console=True
+                    ${fallback_selectors}    Create List    css=input[type="text"]    css=button    xpath=//input    xpath=//button
+                    RETURN    ${fallback_selectors}
+                END
+                ${first_pred}    Set Variable    ${predictions}[0]
+                ${pred_candidates}    Get From Dictionary    ${first_pred}    candidates
+                ${first_candidate}    Set Variable    ${pred_candidates}[0]
+                ${content}    Get From Dictionary    ${first_candidate}    content
+                ${parts}    Get From Dictionary    ${content}    parts
+                ${first_part}    Set Variable    ${parts}[0]
+                ${ai_text}    Get From Dictionary    ${first_part}    text
+            ELSE
+                Log    ❌ Unknown response format    console=True
+                Log    Response: ${ai_response}    console=True
+                ${fallback_selectors}    Create List    css=input[type="text"]    css=button    xpath=//input    xpath=//button
+                RETURN    ${fallback_selectors}
+            END
         END
         
-        ${choices_list}    Get From Dictionary    ${ai_response}    choices
-        ${choices_length}    Get Length    ${choices_list}
-        IF    ${choices_length} == 0
-            Log    ❌ AI response has empty choices array    console=True
-            # Return fallback selectors
-            ${fallback_selectors}    Create List    css=input[type="text"]    css=button    xpath=//input    xpath=//button
-            RETURN    ${fallback_selectors}
-        END
-        
-        ${first_choice}    Set Variable    ${choices_list}[0]
-        ${message}    Get From Dictionary    ${first_choice}    message
-        ${ai_text}    Get From Dictionary    ${message}    content
-        
-        Log    🧠 REAL AI Response: ${ai_text}    console=True
+        Log    🧠 AI Response: ${ai_text}    console=True
         
         # Convert AI response to list of selectors
         ${selectors}    Parse AI Response To Selectors    ${ai_text}
@@ -390,10 +419,9 @@ Call Walmart AI Gateway
         RETURN    ${selectors}
         
     EXCEPT    AS    ${error}
-        Log    ❌ AI Gateway call failed: ${error}    console=True
-        Log    🔄 Falling back to demo mode selectors...    console=True
+        Log    ❌ AI API call failed: ${error}    console=True
+        Log    🔄 Using fallback selectors...    console=True
         
-        # Return intelligent fallback selectors based on common patterns
         ${fallback_selectors}    Create List    
         ...    css=input[type="text"]
         ...    css=input[placeholder*="search"]
@@ -402,7 +430,7 @@ Call Walmart AI Gateway
         ...    xpath=//input[@type="text"]
         ...    xpath=//button[contains(text(),"Search")]
         
-        Log    🤖 Using ${fallback_selectors.__len__()} fallback selectors    console=True
+        Log    🤖 Using fallback selectors    console=True
         RETURN    ${fallback_selectors}
     END
 

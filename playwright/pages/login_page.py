@@ -1,5 +1,6 @@
 from pages.base_page import BasePage
 from locators.aw_locators import AwLocators
+from utils.healing_engine import generate_locators
 from playwright.sync_api import expect
 import allure
 

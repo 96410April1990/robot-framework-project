@@ -82,3 +82,8 @@ pytest
 pytest-html
 allure-pytest
 pytest-xdist
+google-generativeai
+pikepdf
+langgraph
+langchain
+langchain-google-genai

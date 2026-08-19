@@ -15,7 +15,7 @@ class FileUploadHandlingPage(BasePage):
     def upload_file(self):
         self.is_visible(FileUploadHandlingLocators.FILE_UPLOAD_CHOOSE_FILE_BTN)
         expect(self.page.locator(FileUploadHandlingLocators.FILE_UPLOAD_CHOOSE_FILE_BTN)).to_be_enabled()
-        self.file_upload(FileUploadHandlingLocators.FILE_UPLOAD_CHOOSE_FILE_BTN, "/Users/r0n01gu/Downloads/Downloads/sample_doc.pdf")
+        self.file_upload(FileUploadHandlingLocators.FILE_UPLOAD_CHOOSE_FILE_BTN, "/Users/rohithnandakumar/Documents/sample_doc.pdf")
         self.is_visible(FileUploadHandlingLocators.FILE_UPLOAD_BTN)
         expect(self.page.locator(FileUploadHandlingLocators.FILE_UPLOAD_BTN)).to_be_enabled()
         self.click(FileUploadHandlingLocators.FILE_UPLOAD_BTN)
