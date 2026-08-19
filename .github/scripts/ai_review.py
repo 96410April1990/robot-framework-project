@@ -13,6 +13,7 @@ import os
 import sys
 import json
 import requests
+import re
 from github import Github
 import importlib
 
@@ -59,29 +60,16 @@ def ask_gemini(prompt):
             return gemini_mod.ask_gemini(prompt)
     except Exception:
         # fallback to direct REST call below
-        pass
-
-    model = GEMINI_MODEL
-    if model and not model.startswith("models/"):
-        model = f"models/{model}"
-    url = f"https://generativelanguage.googleapis.com/v1beta2/{model}:generateText?key={GEMINI_API_KEY}"
-    headers = {"Content-Type": "application/json"}
-    payload = {
-        "prompt": {"text": prompt},
-        "temperature": 0.1,
-        "maxOutputTokens": 1200,
-    }
-    resp = requests.post(url, headers=headers, data=json.dumps(payload), timeout=60)
-    resp.raise_for_status()
-    j = resp.json()
-    if isinstance(j, dict):
-        if "candidates" in j and len(j["candidates"]) > 0 and "content" in j["candidates"][0]:
-            return j["candidates"][0]["content"].strip()
-        if "output" in j:
-            out = j["output"]
-            if isinstance(out, list) and len(out) > 0 and "content" in out[0]:
-                return out[0]["content"].strip()
-    return json.dumps(j)
+        # Avoid REST API key fallback here because using API keys in REST URLs can be
+        # unsupported for some Gemini deployments and risks leaking secrets in logs.
+        # Prefer that the repo provides a local `playwright.utils.gemini_client.ask_gemini`
+        # implementation that authenticates via a service account (GOOGLE_APPLICATION_CREDENTIALS)
+        # or that the environment sets `OPENAI_API_KEY` to use OpenAI as a fallback.
+        raise RuntimeError(
+            "No local Gemini client available. REST API fallback disabled to avoid leaking API keys. "
+            "Configure a service-account based Google GenAI client in `playwright/utils/gemini_client.py` "
+            "and set `GOOGLE_APPLICATION_CREDENTIALS`, or set `OPENAI_API_KEY` to use OpenAI instead."
+        )
 
 
 def ask_openai(prompt):
@@ -204,7 +192,12 @@ def main():
         print("Requesting AI review from configured AI provider...")
         review_text = ask_ai(prompt)
     except Exception as e:
-        review_text = f"AI review failed: {e}"
+        # Sanitize any potential secrets in the exception text before posting
+        e_str = str(e)
+        # redact common API key patterns (very conservative)
+        e_str = re.sub(r"(key=)[^\)\s]+", r"\1REDACTED", e_str)
+        e_str = re.sub(r"(Bearer\s+)[A-Za-z0-9\-_.]+", r"\1REDACTED", e_str)
+        review_text = f"AI review failed: {e_str}"
 
     comment_body = "## Automated AI Code Review\n\n" + review_text
     print(comment_body)
