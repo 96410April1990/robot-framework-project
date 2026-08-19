@@ -30,7 +30,13 @@ if not ((GEMINI_API_KEY or OPENAI_API_KEY) and TOKEN_GITHUB and REPO and PR_NUMB
     sys.exit(1)
 
 def gather_diff(repo, pr_number):
-    gh = Github(TOKEN_GITHUB)
+    try:
+        # PyGithub v2+ recommends using Auth.Token
+        from github import Auth
+        gh = Github(auth=Auth.Token(TOKEN_GITHUB))
+    except Exception:
+        # fall back to older constructor for older PyGithub versions
+        gh = Github(TOKEN_GITHUB)
     repository = gh.get_repo(repo)
     pr = repository.get_pull(int(pr_number))
     files = pr.get_files()
