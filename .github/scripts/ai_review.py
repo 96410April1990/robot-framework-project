@@ -60,17 +60,28 @@ def ask_gemini(prompt):
             return gemini_mod.ask_gemini(prompt)
     except Exception:
         # fallback to direct REST call below
-        # Avoid REST API key fallback here because using API keys in REST URLs can be
-        # unsupported for some Gemini deployments and risks leaking secrets in logs.
-        # Prefer that the repo provides a local `playwright.utils.gemini_client.ask_gemini`
-        # implementation that authenticates via a service account (GOOGLE_APPLICATION_CREDENTIALS)
-        # or that the environment sets `OPENAI_API_KEY` to use OpenAI as a fallback.
-        raise RuntimeError(
-            "No local Gemini client available. REST API fallback disabled to avoid leaking API keys. "
-            "Configure a service-account based Google GenAI client in `playwright/utils/gemini_client.py` "
-            "and set `GOOGLE_APPLICATION_CREDENTIALS`, or set `OPENAI_API_KEY` to use OpenAI instead."
-        )
-
+        pass
+    model = GEMINI_MODEL
+    if model and not model.startswith("models/"):
+        model = f"models/{model}"
+    url = f"https://generativelanguage.googleapis.com/v1beta2/{model}:generateText?key={GEMINI_API_KEY}"
+    headers = {"Content-Type": "application/json"}
+    payload = {
+        "prompt": {"text": prompt},
+        "temperature": 0.1,
+        "maxOutputTokens": 1200,
+    }
+    resp = requests.post(url, headers=headers, data=json.dumps(payload), timeout=60)
+    resp.raise_for_status()
+    j = resp.json()
+    if isinstance(j, dict):
+        if "candidates" in j and len(j["candidates"]) > 0 and "content" in j["candidates"][0]:
+            return j["candidates"][0]["content"].strip()
+        if "output" in j:
+            out = j["output"]
+            if isinstance(out, list) and len(out) > 0 and "content" in out[0]:
+                return out[0]["content"].strip()
+    return json.dumps(j)
 
 def ask_openai(prompt):
     """Fallback to OpenAI if configured."""
@@ -104,65 +115,6 @@ def ask_ai(prompt):
 def post_pr_comment(pr, body):
     pr.create_issue_comment(body)
 
-
-def post_inline_comments(pr, review_text):
-    """Post lightweight inline review comments on files mentioned in the AI review.
-    For each file in the PR that is referenced by name in the review_text, add a
-    single comment at the first added/changed line in the patch. This is best-effort
-    and avoids creating noisy comments for files not mentioned by the AI output.
-    """
-    try:
-        commits = list(pr.get_commits())
-        if not commits:
-            return
-        last_sha = commits[-1].sha
-        files = list(pr.get_files())
-        comments = []
-        for f in files:
-            # Only comment on files that the AI review mentions
-            if f.filename not in review_text:
-                continue
-            patch = f.patch or ""
-            if not patch:
-                continue
-            # find first added line in the patch and use its position in the diff
-            pos = None
-            pos_counter = 0
-            for ln in patch.splitlines():
-                pos_counter += 1
-                # skip file header lines like '+++'
-                if ln.startswith('+++') or ln.startswith('---'):
-                    continue
-                if ln.startswith('+') and not ln.startswith('+++'):
-                    pos = pos_counter
-                    break
-            if pos is None:
-                continue
-            body = (
-                "Automated AI reviewer: the main review found a potential high-impact issue in this file.\n"
-                "See the top-level AI review comment for details and remediation steps."
-            )
-            comments.append({
-                'path': f.filename,
-                'position': pos,
-                'body': body,
-            })
-
-        if comments:
-            # Create a single review containing all inline comments
-            try:
-                pr.create_review(body="Automated AI inline comments.", event="COMMENT", comments=comments)
-            except Exception:
-                # Older PyGithub versions may not accept 'comments' in create_review; fallback per-file
-                for c in comments:
-                    try:
-                        pr.create_review_comment(c['body'], last_sha, c['path'], c['position'])
-                    except Exception:
-                        # give up on this file but continue
-                        continue
-    except Exception as e:
-        print(f"Inline comment posting failed: {e}")
-
 def post_slack_message(webhook, text):
     try:
         requests.post(webhook, json={"text": text}, timeout=10)
@@ -192,23 +144,12 @@ def main():
         print("Requesting AI review from configured AI provider...")
         review_text = ask_ai(prompt)
     except Exception as e:
-        # Sanitize any potential secrets in the exception text before posting
-        e_str = str(e)
-        # redact common API key patterns (very conservative)
-        e_str = re.sub(r"(key=)[^\)\s]+", r"\1REDACTED", e_str)
-        e_str = re.sub(r"(Bearer\s+)[A-Za-z0-9\-_.]+", r"\1REDACTED", e_str)
-        review_text = f"AI review failed: {e_str}"
+        review_text = f"AI review failed: {e}"
 
     comment_body = "## Automated AI Code Review\n\n" + review_text
     print(comment_body)
     print("Posting comment to PR...")
     post_pr_comment(pr, comment_body)
-
-    # Post lightweight inline comments for any files the AI mentioned
-    try:
-        post_inline_comments(pr, review_text)
-    except Exception as e:
-        print(f"Posting inline comments failed: {e}")
 
     if SLACK_WEBHOOK:
         slack_text = f"AI Review posted for PR #{PR_NUMBER} in {REPO}:\n{review_text[:1500]}"
