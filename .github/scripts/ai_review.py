@@ -93,8 +93,14 @@ def ask_gemini(prompt):
         }
     }
 
-    resp = requests.post(url, headers=headers, json=payload, timeout=60)
-    resp.raise_for_status()
+    try:
+        resp = requests.post(url, headers=headers, json=payload, timeout=60)
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as http_err:
+        # Securely sanitize the error message so your API Key is never printed to GitHub logs
+        status_code = http_err.response.status_code if http_err.response is not None else "Unknown"
+        raise RuntimeError(f"Gemini API request failed with status code: {status_code} (URL hidden for security)")
+
     j = resp.json()
 
     # FIX 3: Parse response structure matching the modern generateContent layout
