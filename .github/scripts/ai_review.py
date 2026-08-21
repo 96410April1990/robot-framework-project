@@ -68,26 +68,44 @@ def ask_gemini(prompt):
     except Exception:
         # fallback to direct REST call below
         pass
+
     model = GEMINI_MODEL
-    if model and not model.startswith("models/"):
-        model = f"models/{model}"
-    url = f"https://generativelanguage.googleapis.com/v1beta2/{model}:generateText?key={GEMINI_API_KEY}"
+    # Strip any leading 'models/' if it exists to prevent duplication
+    if model.startswith("models/"):
+        model = model.replace("models/", "")
+
+    # FIX 1: Use the updated v1beta API and generateContent endpoint
+    url = f"https://googleapis.com{model}:generateContent?key={GEMINI_API_KEY}"
     headers = {"Content-Type": "application/json"}
+
+    # FIX 2: Modernize JSON payload format to match Gemini 2.5 structure
     payload = {
-        "prompt": {"text": prompt},
-        "temperature": 0.1,
-        "maxOutputTokens": 1200,
+        "contents": [
+            {
+                "parts": [
+                    {"text": prompt}
+                ]
+            }
+        ],
+        "generationConfig": {
+            "temperature": 0.1,
+            "maxOutputTokens": 1200
+        }
     }
-    resp = requests.post(url, headers=headers, data=json.dumps(payload), timeout=60)
+
+    resp = requests.post(url, headers=headers, data=payload, timeout=60)
     resp.raise_for_status()
     j = resp.json()
-    if isinstance(j, dict):
-        if "candidates" in j and len(j["candidates"]) > 0 and "content" in j["candidates"][0]:
-            return j["candidates"][0]["content"].strip()
-        if "output" in j:
-            out = j["output"]
-            if isinstance(out, list) and len(out) > 0 and "content" in out[0]:
-                return out[0]["content"].strip()
+
+    # FIX 3: Parse response structure matching the modern generateContent layout
+    try:
+        if "candidates" in j and len(j["candidates"]) > 0:
+            parts = j["candidates"][0]["content"]["parts"]
+            if len(parts) > 0 and "text" in parts[0]:
+                return parts[0]["text"].strip()
+    except (KeyError, IndexError):
+        pass
+        
     return json.dumps(j)
 
 def ask_openai(prompt):

@@ -26,6 +26,7 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt || true; fi
           pip install flake8 bandit safety pytest PyGithub openai requests
+          pip install --upgrade google-generativeai python-dotenv
 
       - name: Run flake8
         run: flake8 || true
