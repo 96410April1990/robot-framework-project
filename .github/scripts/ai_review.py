@@ -75,7 +75,7 @@ def ask_gemini(prompt):
         model = model.replace("models/", "")
 
     # FIX 1: Use the updated v1beta API and generateContent endpoint
-    url = f"https://googleapis.com{model}:generateContent?key={GEMINI_API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}"
     headers = {"Content-Type": "application/json"}
 
     # FIX 2: Modernize JSON payload format to match Gemini 2.5 structure
@@ -93,17 +93,18 @@ def ask_gemini(prompt):
         }
     }
 
-    resp = requests.post(url, headers=headers, data=payload, timeout=60)
+    resp = requests.post(url, headers=headers, json=payload, timeout=60)
     resp.raise_for_status()
     j = resp.json()
 
     # FIX 3: Parse response structure matching the modern generateContent layout
     try:
         if "candidates" in j and len(j["candidates"]) > 0:
-            parts = j["candidates"][0]["content"]["parts"]
+            content_node = j["candidates"][0].get("content", {})
+            parts = content_node.get("parts", [])
             if len(parts) > 0 and "text" in parts[0]:
                 return parts[0]["text"].strip()
-    except (KeyError, IndexError):
+    except Exception:
         pass
         
     return json.dumps(j)
