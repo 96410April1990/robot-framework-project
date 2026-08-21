@@ -93,8 +93,9 @@ def ask_gemini(prompt):
         }
     }
 
+    
+    resp = requests.post(url, headers=headers, json=payload, timeout=60)
     try:
-        resp = requests.post(url, headers=headers, json=payload, timeout=60)
         resp.raise_for_status()
     except requests.exceptions.HTTPError as http_err:
         # Securely sanitize the error message so your API Key is never printed to GitHub logs
@@ -106,12 +107,14 @@ def ask_gemini(prompt):
     # FIX 3: Parse response structure matching the modern generateContent layout
     try:
         if "candidates" in j and len(j["candidates"]) > 0:
-            content_node = j["candidates"][0].get("content", {})
+            # Step 1: Extract first candidate from list object
+            first_candidate = j["candidates"][0]
+            content_node = first_candidate.get("content", {})
             parts = content_node.get("parts", [])
             if len(parts) > 0 and "text" in parts[0]:
                 return parts[0]["text"].strip()
-    except Exception:
-        pass
+    except Exception as parse_error:
+        print(f"JSON Structure parsing debug warning: {parse_error}")
         
     return json.dumps(j)
 
