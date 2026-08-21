@@ -24,7 +24,7 @@ os.environ.pop("GOOGLE_APPLICATION_CREDENTIALS", None)
 os.environ.pop("CLOUDSDK_AUTH_CREDENTIALS_INLINE_JSON", None)
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 TOKEN_GITHUB = os.getenv("TOKEN_GITHUB")
 # Support either SLACK_WEBHOOK_URL or legacy SLACK_WEBHOOK
