@@ -13,6 +13,7 @@ import os
 import sys
 import json
 import requests
+import time
 import re
 from github import Github
 import importlib
@@ -56,6 +57,7 @@ def gather_diff(repo, pr_number):
 def ask_gemini(prompt):
     """Prefer using the project's gemini client if available, otherwise call REST endpoint."""
     # Try to import the local gemini client from playwright/utils
+    time.sleep(3)
     try:
         repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
         if repo_root not in sys.path:
@@ -159,3 +161,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
