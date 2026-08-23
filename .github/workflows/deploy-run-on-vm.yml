@@ -1,4 +1,4 @@
-name: Execute provisioning script on VM after merge
+name: "Execute provisioning script on VM after merge"
 
 on:
   push:
@@ -19,13 +19,18 @@ jobs:
           VM_HOST: ${{ secrets.VM_HOST }}
           VM_USER: ${{ secrets.VM_USER }}
           VM_PORT: ${{ secrets.VM_PORT || '22' }}
-          REMOTE_DIR: ${{ secrets.VM_REMOTE_DIR || '/home/' + secrets.VM_USER + '/project' }}
+          REMOTE_DIR: ${{ secrets.VM_REMOTE_DIR }}
           BRANCH: main
           REPO_URL: git@github.com:${{ github.repository }}.git
           PORT: 8080
         run: |
           ssh -o StrictHostKeyChecking=no -p $VM_PORT $VM_USER@$VM_HOST 'bash -s' <<'SSH_EOF'
           set -euo pipefail
+          # compute REMOTE_DIR default if not provided via secrets
+          REMOTE_DIR="${REMOTE_DIR:-}"
+          if [ -z "${REMOTE_DIR}" ]; then
+            REMOTE_DIR="/home/${VM_USER}/project"
+          fi
           # Ensure the script exists and is executable
           if [ ! -x /home/$VM_USER/provision_and_run.sh ]; then
             echo "provision_and_run.sh not found or not executable at /home/$VM_USER/provision_and_run.sh" >&2
