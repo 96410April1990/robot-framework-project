@@ -1,0 +1,35 @@
+name: Execute provisioning script on VM after merge
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  run-provision-script:
+    name: Run provision_and_run.sh on VM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start ssh-agent
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+
+      - name: Execute remote provisioning script
+        env:
+          VM_HOST: ${{ secrets.VM_HOST }}
+          VM_USER: ${{ secrets.VM_USER }}
+          VM_PORT: ${{ secrets.VM_PORT || '22' }}
+          REMOTE_DIR: ${{ secrets.VM_REMOTE_DIR || '/home/' + secrets.VM_USER + '/project' }}
+          BRANCH: main
+          REPO_URL: git@github.com:${{ github.repository }}.git
+          PORT: 8080
+        run: |
+          ssh -o StrictHostKeyChecking=no -p $VM_PORT $VM_USER@$VM_HOST 'bash -s' <<'SSH_EOF'
+          set -euo pipefail
+          # Ensure the script exists and is executable
+          if [ ! -x /home/$VM_USER/provision_and_run.sh ]; then
+            echo "provision_and_run.sh not found or not executable at /home/$VM_USER/provision_and_run.sh" >&2
+            exit 2
+          fi
+          sudo /home/$VM_USER/provision_and_run.sh --repo ${REPO_URL} --branch ${BRANCH} --dir ${REMOTE_DIR} --port ${PORT}
+          SSH_EOF
