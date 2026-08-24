@@ -1,6 +1,7 @@
 from pages.base_page import BasePage
 from locators.file_upload_handling_locators import FileUploadHandlingLocators
 from playwright.sync_api import expect
+from pathlib import Path
 import allure
 
 class FileUploadHandlingPage(BasePage):
@@ -15,7 +16,10 @@ class FileUploadHandlingPage(BasePage):
     def upload_file(self):
         self.is_visible(FileUploadHandlingLocators.FILE_UPLOAD_CHOOSE_FILE_BTN)
         expect(self.page.locator(FileUploadHandlingLocators.FILE_UPLOAD_CHOOSE_FILE_BTN)).to_be_enabled()
-        self.file_upload(FileUploadHandlingLocators.FILE_UPLOAD_CHOOSE_FILE_BTN, "/Users/rohithnandakumar/Documents/sample_doc.pdf")
+        # Use a path relative to the `playwright` folder so this works in VMs and containers
+        base_dir = Path(__file__).resolve().parents[1]  # playwright/
+        pdf_path = base_dir / 'documents' / 'sample_doc.pdf'
+        self.file_upload(FileUploadHandlingLocators.FILE_UPLOAD_CHOOSE_FILE_BTN, str(pdf_path))
         self.is_visible(FileUploadHandlingLocators.FILE_UPLOAD_BTN)
         expect(self.page.locator(FileUploadHandlingLocators.FILE_UPLOAD_BTN)).to_be_enabled()
         self.click(FileUploadHandlingLocators.FILE_UPLOAD_BTN)
