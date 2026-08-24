@@ -18,6 +18,7 @@ jobs:
           VM_KEY: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ secrets.GEMINI_MODEL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
@@ -29,9 +30,6 @@ jobs:
             set -x
             export PYTHONUNBUFFERED=1
             cd /home/rohith-azureuser/project
-            #git fetch origin main
-            #git checkout main
-            #git reset --hard origin/main
             git pull
             sudo apt-get update
             sudo apt-get install -y default-jre
@@ -48,12 +46,9 @@ jobs:
             GEMINI_MODEL=${GEMINI_MODEL}
             EOF
             chmod 600 .env
-            #source venv/bin/activate
-            #deactivate
             rm -rf venv
             pip install --ignore-installed -r requirements.txt --use-deprecated=legacy-resolver
             export PATH="$HOME/.local/bin:$PATH"
-            #sudo python3 -m playwright install-deps
             python3 -m playwright install chromium
             which pytest
             pip list | grep -i pytest
@@ -64,3 +59,24 @@ jobs:
             cd allure-report
             nohup python3 -m http.server 8080 > /dev/null 2>&1 &
             disown
+
+      - name: Notify Slack with Allure report URL
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          VM_HOST: ${{ secrets.VM_HOST }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+            echo "SLACK_WEBHOOK_URL not set; skipping Slack notification"
+            exit 0
+          fi
+          REPORT_URL="http://${VM_HOST}:8080"
+          payload=$(jq -n --arg text "Allure report available: ${REPORT_URL}" '{text: $text}')
+          # Fallback if jq is not present
+          if command -v jq >/dev/null 2>&1; then
+            curl -s -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL" || true
+          else
+            curl -s -X POST -H 'Content-type: application/json' --data "{\"text\": \"Allure report available: ${REPORT_URL}\"}" "$SLACK_WEBHOOK_URL" || true
+          fi
+
