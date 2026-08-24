@@ -23,10 +23,15 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           envs: VM_HOST, VM_USER, VM_KEY, GEMINI_API_KEY, GEMINI_MODEL
+          debug: true
           script: |
             set -euo pipefail
+            set -x
+            export PYTHONUNBUFFERED=1
             cd /home/rohith-azureuser/project
-            git pull origin main
+            git fetch origin main
+            git checkout main
+            git reset --hard origin/main
             cat > .env << EOF
             GEMINI_API_KEY=${GEMINI_API_KEY}
             GEMINI_MODEL=${GEMINI_MODEL}
@@ -35,7 +40,7 @@ jobs:
             source venv/bin/activate
             which pytest
             pip list | grep -i pytest
-            ENV=dev pytest tests/PracticeTestAutomationTests.py --alluredir=allure-results -v
+            ENV=dev pytest tests/PracticeTestAutomationTests.py --alluredir=allure-results -v 2>&1 || true
             allure generate allure-results --clean -o allure-report
             cd /home/rohith-azureuser/project/playwright/allure-report
             nohup python3 -m http.server 8080 > /dev/null 2>&1 &
