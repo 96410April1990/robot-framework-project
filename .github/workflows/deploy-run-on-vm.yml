@@ -52,7 +52,7 @@ jobs:
             #deactivate
             rm -rf venv
             pip install --ignore-installed -r requirements.txt --use-deprecated=legacy-resolver
-            sudo python3 -m playwright install-deps
+            #sudo python3 -m playwright install-deps
             python3 -m playwright install chromium
             which pytest
             pip list | grep -i pytest
