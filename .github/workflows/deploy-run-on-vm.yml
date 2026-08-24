@@ -49,7 +49,7 @@ jobs:
             EOF
             chmod 600 .env
             #source venv/bin/activate
-            deactivate
+            #deactivate
             rm -rf venv
             python3 -m playwright install-deps
             python3 -m playwright install chromium
