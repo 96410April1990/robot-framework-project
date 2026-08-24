@@ -29,9 +29,10 @@ jobs:
             set -x
             export PYTHONUNBUFFERED=1
             cd /home/rohith-azureuser/project
-            git fetch origin main
-            git checkout main
-            git reset --hard origin/main
+            #git fetch origin main
+            #git checkout main
+            #git reset --hard origin/main
+            git pull
             cat > .env << EOF
             GEMINI_API_KEY=${GEMINI_API_KEY}
             GEMINI_MODEL=${GEMINI_MODEL}
