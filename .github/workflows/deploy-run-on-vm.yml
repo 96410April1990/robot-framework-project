@@ -1,39 +1,39 @@
 name: "Execute provisioning script on VM after merge"
 
 on:
-  push:
+  pull_request:
+    types: [ closed ]
     branches: [ main ]
 
 jobs:
   run-provision-script:
-    name: Run provision_and_run.sh on VM
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: Start ssh-agent and add private key
-        run: |
-          set -euo pipefail
-          mkdir -p ~/.ssh
-          printf '%s' "${{ secrets.VM_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
-
-      - name: Execute remote provisioning script
-        env:
+      - name: SSH into Azure VM and run test suite
+        uses: appleboy/ssh-action@v1.0.3
+        env: 
           VM_HOST: ${{ secrets.VM_HOST }}
           VM_USER: ${{ secrets.VM_USER }}
-          VM_PORT: ${{ secrets.VM_PORT || '22' }}
-          REMOTE_DIR: ${{ secrets.VM_REMOTE_DIR }}
-          BRANCH: main
-          REPO_URL: git@github.com:${{ github.repository }}.git
-          PORT: 8080
-        run: |
-          set -euo pipefail
-          # compute REMOTE_DIR default if not provided via secrets
-          if [ -z "${REMOTE_DIR:-}" ]; then
-            REMOTE_DIR="/home/${VM_USER}/project"
-          fi
-
-          echo "Running provisioning script on ${VM_HOST} as ${VM_USER} with REMOTE_DIR=${REMOTE_DIR}"
-
-          ssh -o StrictHostKeyChecking=no -p "$VM_PORT" "$VM_USER"@"$VM_HOST" "sudo /home/$VM_USER/provision_and_run.sh --repo '$REPO_URL' --branch '$BRANCH' --dir '$REMOTE_DIR' --port '$PORT'"
+          VM_KEY: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ secrets.GEMINI_MODEL }}
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          envs: VM_HOST, VM_USER, VM_KEY, GEMINI_API_KEY, GEMINI_MODEL
+          script: |
+            set -euo pipefail
+            cd /home/rohith-azureuser/project
+            git pull origin main
+            cat > .env << EOF
+            GEMINI_API_KEY=${GEMINI_API_KEY}
+            GEMINI_MODEL=${GEMINI_MODEL}
+            EOF
+            chmod 600 .env
+            source venv/bin/activate
+            ENV=dev pytest tests/PracticeTestAutomationTests.py --alluredir=allure-results -v
+            allure generate allure-results --clean -o allure-report
+            cd /home/rohith-azureuser/project/playwright/allure-report
+            nohup python3 -m http.server 8080 > /dev/null 2>&1 &
