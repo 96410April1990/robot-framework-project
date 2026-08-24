@@ -4,7 +4,6 @@ webdrivermanager
 robotframework-requests==0.9.3
 RESTinstance==1.0.2
 robotframework-jsonlibrary==0.3.1
-robotframework-httplibrary==0.4.2
 jsonpatch==1.32
 pycryptodome==3.10.1
 jsonschema==3.2.0
@@ -28,17 +27,14 @@ robotframework-ftplibrary==1.9
 robotframework-imaplibrary2==0.3.8
 robotframework-pabot
 robotframework-datadriver==0.3.6
-robotframework-autorecorder==0.1.0
 robotframework-pdf2textlibrary==1.0.1
 robotframework-sshlibrary==3.5.1
-robotframework-jsonlibrary==0.3.1
 robotframework-appiumlibrary==1.5.0.7
 robotframework-excellib==2.0.1
 azure-storage-file-share
 azure-storage-file
 pyodbc
 robotframework-crypto
-azure-storage-file-share
 Authlib
 PyYAML
 jproperties
@@ -46,9 +42,7 @@ selenium==4.9.0
 rpaframework
 confluent-kafka
 robotframework-ConfluentKafkaLibrary
-robotframework-pabot
 robotframework-kafkalibrary
-azure-cosmos
 PyJWT
 PyPDF2
 jsondiff
