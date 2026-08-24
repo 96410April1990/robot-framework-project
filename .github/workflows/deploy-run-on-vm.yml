@@ -51,7 +51,7 @@ jobs:
             #source venv/bin/activate
             #deactivate
             rm -rf venv
-            pip install -r requirements.txt --use-deprecated=legacy-resolver
+            pip install --ignore-installed -r requirements.txt --use-deprecated=legacy-resolver
             sudo python3 -m playwright install-deps
             python3 -m playwright install chromium
             which pytest

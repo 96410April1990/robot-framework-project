@@ -37,7 +37,6 @@ robotframework-excellib==2.0.1
 azure-storage-file-share
 azure-storage-file
 pyodbc
-pycryptodome
 robotframework-crypto
 azure-storage-file-share
 Authlib
