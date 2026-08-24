@@ -51,14 +51,14 @@ jobs:
             #source venv/bin/activate
             #deactivate
             rm -rf venv
-            python3 -m playwright install-deps
-            python3 -m playwright install chromium
             pip install -r requirements.txt --use-deprecated=legacy-resolver
+            sudo python3 -m playwright install-deps
+            python3 -m playwright install chromium
             which pytest
             pip list | grep -i pytest
             ENV=dev pytest tests/PracticeTestAutomationTests.py --alluredir=allure-results -v 2>&1 || true
             allure generate allure-results --clean -o allure-report
             fuser -k 8080/tcp || true
-            cd /home/rohith-azureuser/project/playwright/allure-report
+            cd allure-report
             nohup python3 -m http.server 8080 > /dev/null 2>&1 &
             disown
