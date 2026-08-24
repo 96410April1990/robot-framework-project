@@ -52,6 +52,7 @@ jobs:
             #deactivate
             rm -rf venv
             pip install --ignore-installed -r requirements.txt --use-deprecated=legacy-resolver
+            export PATH="$HOME/.local/bin:$PATH"
             #sudo python3 -m playwright install-deps
             python3 -m playwright install chromium
             which pytest
