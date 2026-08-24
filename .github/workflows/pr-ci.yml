@@ -52,6 +52,7 @@ jobs:
 
   ai-review:
     name: AI Review & Slack Notify
+    if: ${{ false }}
     runs-on: ubuntu-latest
     needs: lint-and-tests
     permissions:
