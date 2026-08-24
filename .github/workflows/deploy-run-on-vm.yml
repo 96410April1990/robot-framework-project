@@ -9,10 +9,14 @@ jobs:
     name: Run provision_and_run.sh on VM
     runs-on: ubuntu-latest
     steps:
-      - name: Start ssh-agent
-        uses: webfactory/ssh-agent@v0
-        with:
-          ssh-private-key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+      - name: Start ssh-agent and add private key
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          printf '%s' "${{ secrets.VM_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
 
       - name: Execute remote provisioning script
         env:
