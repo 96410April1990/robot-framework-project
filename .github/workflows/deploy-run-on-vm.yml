@@ -33,15 +33,32 @@ jobs:
             #git checkout main
             #git reset --hard origin/main
             git pull
+            sudo apt-get update
+            sudo apt-get install -y default-jre
+            if ! command -v allure &> /dev/null; then
+                ALLURE_VERSION=2.32.0
+                curl -o allure.tgz -Ls "https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz"
+                sudo tar -zxf allure.tgz -C /opt/
+                sudo ln -sf /opt/allure-${ALLURE_VERSION}/bin/allure /usr/local/bin/allure
+                rm allure.tgz
+            fi
+            allure --version
             cat > .env << EOF
             GEMINI_API_KEY=${GEMINI_API_KEY}
             GEMINI_MODEL=${GEMINI_MODEL}
             EOF
             chmod 600 .env
-            source venv/bin/activate
+            #source venv/bin/activate
+            deactivate
+            rm -rf venv
+            python3 -m playwright install-deps
+            python3 -m playwright install chromium
+            pip install -r requirements.txt --use-deprecated=legacy-resolver
             which pytest
             pip list | grep -i pytest
             ENV=dev pytest tests/PracticeTestAutomationTests.py --alluredir=allure-results -v 2>&1 || true
             allure generate allure-results --clean -o allure-report
+            fuser -k 8080/tcp || true
             cd /home/rohith-azureuser/project/playwright/allure-report
             nohup python3 -m http.server 8080 > /dev/null 2>&1 &
+            disown
