@@ -46,7 +46,7 @@ robotframework-kafkalibrary
 PyJWT
 PyPDF2
 jsondiff
-mysqlclient
+#mysqlclient
 dbbot
 dbbot-sqlalchemy
 psycopg2-binary
