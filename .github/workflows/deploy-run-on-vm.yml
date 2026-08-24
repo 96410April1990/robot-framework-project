@@ -57,6 +57,7 @@ jobs:
             python3 -m playwright install chromium
             which pytest
             pip list | grep -i pytest
+            cd playwright
             ENV=dev pytest tests/PracticeTestAutomationTests.py --alluredir=allure-results -v 2>&1 || true
             allure generate allure-results --clean -o allure-report
             fuser -k 8080/tcp || true
