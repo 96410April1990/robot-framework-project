@@ -2,7 +2,7 @@ class BaseConfig:
     BASE_URL = ""
     BROWSER = "chromium"
     TIMEOUT = 30000
-    HEADLESS = False
+    HEADLESS = True
     VIEWPORT_WIDTH = 1920
     VIEWPORT_HEIGHT = 1080
     RECORD_VIDEO = True
