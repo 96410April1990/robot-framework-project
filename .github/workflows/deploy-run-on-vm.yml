@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Start ssh-agent
-        uses: webfactory/ssh-agent@v0.8.1
+        uses: webfactory/ssh-agent@v0
         with:
           ssh-private-key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
 
