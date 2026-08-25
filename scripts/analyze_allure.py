@@ -43,7 +43,6 @@ GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 GEMINI_MODEL = os.getenv('GEMINI_MODEL', 'gemini-3.5-flash')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
-
 def ask_gemini(prompt: str) -> str:
     # Try local gemini client first (playwright/utils/gemini_client.py)
     try:
@@ -92,7 +91,6 @@ def ask_gemini(prompt: str) -> str:
         pass
     return json.dumps(j)
 
-
 def ask_openai(prompt: str) -> str:
     if not OPENAI_API_KEY:
         raise RuntimeError('OPENAI_API_KEY not configured')
@@ -114,7 +112,6 @@ def ask_openai(prompt: str) -> str:
     j = resp.json()
     return j['choices'][0]['message']['content'].strip()
 
-
 def ask_ai(prompt: str) -> str:
     # Prefer Gemini, fallback to OpenAI
     try:
@@ -127,6 +124,34 @@ def ask_ai(prompt: str) -> str:
         return ask_openai(prompt)
     raise RuntimeError('No AI provider configured (set GEMINI_API_KEY or OPENAI_API_KEY)')
 
+def _redact_text_secrets(text: str) -> str:
+    if not isinstance(text, str):
+        return text
+    redacted = text
+    # Generic API key / token style patterns in free text
+    redacted = re.sub(r'(?i)(api[_-]?key\s*[=:]\s*)([^\s,;]+)', r'\1***REDACTED***', redacted)
+    redacted = re.sub(r'(?i)(authorization\s*:\s*bearer\s+)([^\s,;]+)', r'\1***REDACTED***', redacted)
+    redacted = re.sub(r'(?i)(token\s*[=:]\s*)([^\s,;]+)', r'\1***REDACTED***', redacted)
+    # Gemini key format commonly starts with AIza
+    redacted = re.sub(r'AIza[0-9A-Za-z\-_]{20,}', '***REDACTED***', redacted)
+    return redacted
+
+def _sanitize_for_output(value):
+    sensitive_key_markers = ('password', 'secret', 'token', 'api_key', 'apikey', 'authorization', 'key')
+    if isinstance(value, dict):
+        sanitized = {}
+        for k, v in value.items():
+            key_lower = str(k).lower()
+            if any(marker in key_lower for marker in sensitive_key_markers):
+                sanitized[k] = '***REDACTED***'
+            else:
+                sanitized[k] = _sanitize_for_output(v)
+        return sanitized
+    if isinstance(value, list):
+        return [_sanitize_for_output(v) for v in value]
+    if isinstance(value, str):
+        return _redact_text_secrets(value)
+    return value
 
 def ask_ai_for_failure(name: str, message: str, history: List[str]) -> Dict[str, object]:
     """Ask the AI to classify a single failure and provide remediation suggestions."""
@@ -149,7 +174,6 @@ def ask_ai_for_failure(name: str, message: str, history: List[str]) -> Dict[str,
         # Fallback to heuristic classification
         cls, conf = classify_failure(message)
         return {'classification': cls, 'confidence': conf, 'suggestion': 'No AI suggestion available.'}
-
 
 def ask_ai_for_analysis(summary: Dict) -> str:
     """Ask the AI to analyze the whole summary and return actionable recommendations."""
@@ -318,7 +342,6 @@ def render_summary(counts: Counter, failures: List[Dict], history_map: Dict[str,
     }
     return summary
 
-
 def post_to_slack(webhook: str, summary: Dict) -> None:
     if not requests:
         print('requests not available; skipping Slack post')
@@ -341,7 +364,6 @@ def post_to_slack(webhook: str, summary: Dict) -> None:
         r.raise_for_status()
     except Exception as e:
         print('Slack post failed:', e)
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -371,7 +393,9 @@ def main():
         except Exception as e:
             print(f'AI overall analysis failed: {e}')
 
-    out = json.dumps(summary, indent=2)
+    #out = json.dumps(summary, indent=2)
+    safe_summary = _sanitize_for_output(summary)
+    out = json.dumps(safe_summary, indent=2)
     print(out)
 
     if args.output_json:
