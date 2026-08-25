@@ -396,7 +396,6 @@ def main():
     #out = json.dumps(summary, indent=2)
     safe_summary = _sanitize_for_output(summary)
     out = json.dumps(safe_summary, indent=2)
-    print(out)
 
     if args.output_json:
         with open(args.output_json, 'w', encoding='utf-8') as f:
