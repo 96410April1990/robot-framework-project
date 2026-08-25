@@ -23,7 +23,7 @@ jobs:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          envs: VM_HOST, VM_USER, VM_KEY, GEMINI_API_KEY, GEMINI_MODEL
+          envs: VM_HOST, VM_USER, VM_KEY, GEMINI_API_KEY, GEMINI_MODEL, SLACK_WEBHOOK_URL
           debug: true
           script: |
             set -euo pipefail
@@ -59,6 +59,9 @@ jobs:
             cd allure-report
             nohup python3 -m http.server 8080 > /dev/null 2>&1 &
             disown
+            # run Allure analyzer to produce a JSON summary and post insights to Slack
+            cd /home/rohith-azureuser/project || true
+            python3 scripts/analyze_allure.py --results-dir playwright/allure-results --post-slack --output-json /tmp/allure_summary.json || true
 
       - name: Notify Slack with Allure report URL
         if: always()
