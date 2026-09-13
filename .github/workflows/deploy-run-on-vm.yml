@@ -19,15 +19,21 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ secrets.GEMINI_MODEL }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          COSMOS_ENDPOINT: ${{ secrets.COSMOS_ENDPOINT }}
+          COSMOS_KEY: ${{ secrets.COSMOS_KEY }}
+          COSMOS_DATABASE: ${{ secrets.COSMOS_DATABASE }}
+          COSMOS_CONTAINER: ${{ secrets.COSMOS_CONTAINER }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          envs: VM_HOST, VM_USER, VM_KEY, GEMINI_API_KEY, GEMINI_MODEL, SLACK_WEBHOOK_URL
-          debug: true
+          envs: VM_HOST, VM_USER, VM_KEY, GEMINI_API_KEY, GEMINI_MODEL, SLACK_WEBHOOK_URL, COSMOS_ENDPOINT, COSMOS_KEY, COSMOS_DATABASE, COSMOS_CONTAINER, GITHUB_RUN_ID, GITHUB_SHA, GITHUB_REF_NAME
+          debug: false
           script: |
             set -euo pipefail
-            set -x
             export PYTHONUNBUFFERED=1
             cd /home/rohith-azureuser/project
             git pull
@@ -53,15 +59,26 @@ jobs:
             which pytest
             pip list | grep -i pytest
             cd playwright
+            # Ensure allure-results is clean before running tests
+            rm -rf allure-results || true
+            mkdir -p allure-results
             ENV=dev pytest tests/PracticeTestAutomationTests.py --alluredir=allure-results -v 2>&1 || true
-            allure generate allure-results --clean -o allure-report
+            EXECUTION_DATE="$(date -u +%Y-%m-%d)"
+            REPORT_ROOT="/home/rohith-azureuser/project/playwright/allure-reports"
+            REPORT_PATH="${REPORT_ROOT}/${EXECUTION_DATE}"
+            mkdir -p "${REPORT_ROOT}"
+            allure generate allure-results --clean -o "${REPORT_PATH}"
             fuser -k 8080/tcp || true
-            cd allure-report
+            cd "${REPORT_ROOT}"
             nohup python3 -m http.server 8080 > /dev/null 2>&1 &
             disown
             # run Allure analyzer to produce a JSON summary and post insights to Slack
             cd /home/rohith-azureuser/project || true
             python3 scripts/analyze_allure.py --results-dir playwright/allure-results --post-slack --output-json /tmp/allure_summary.json || true
+            export EXECUTION_DATE
+            export REPORT_URL="http://${VM_HOST}:8080/${EXECUTION_DATE}"
+            export PROJECT_NAME="robot-framework-project"
+            python3 scripts/publish_test_summary.py /tmp/allure_summary.json
 
       - name: Notify Slack with Allure report URL
         if: always()
@@ -74,12 +91,11 @@ jobs:
             echo "SLACK_WEBHOOK_URL not set; skipping Slack notification"
             exit 0
           fi
-          REPORT_URL="http://${VM_HOST}:8080"
-          payload=$(jq -n --arg text "Allure report available: ${REPORT_URL}" '{text: $text}')
-          # Fallback if jq is not present
+          EXECUTION_DATE="$(date -u +%Y-%m-%d)"
+          REPORT_URL="http://${VM_HOST}:8080/${EXECUTION_DATE}"
           if command -v jq >/dev/null 2>&1; then
+            payload=$(jq -n --arg text "Allure report available: ${REPORT_URL}" '{text: $text}')
             curl -s -X POST -H 'Content-type: application/json' --data "$payload" "$SLACK_WEBHOOK_URL" || true
           else
             curl -s -X POST -H 'Content-type: application/json' --data "{\"text\": \"Allure report available: ${REPORT_URL}\"}" "$SLACK_WEBHOOK_URL" || true
           fi
-
