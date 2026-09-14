@@ -7,7 +7,7 @@ import os
 import sys
 from pathlib import Path
 
-from azure.core.exceptions import ResourceExistsError
+from azure.core.exceptions import ResourceExistsError, ResourceNotFoundError
 from azure.storage.fileshare import ShareDirectoryClient, ShareFileClient
 
 
@@ -45,8 +45,12 @@ def upload_file(
         share_name=share_name,
         file_path=remote_path,
     )
+    try:
+        client.delete_file()
+    except ResourceNotFoundError:
+        pass
     with local_path.open("rb") as file_handle:
-        client.upload_file(file_handle, overwrite=True)
+        client.upload_file(file_handle)
 
 
 def upload_tree(
