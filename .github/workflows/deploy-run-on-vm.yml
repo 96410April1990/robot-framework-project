@@ -26,6 +26,8 @@ jobs:
           AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
           AZURE_FILE_SHARE_NAME: ${{ secrets.AZURE_FILE_SHARE_NAME }}
           AZURE_FILE_SHARE_ROOT: ${{ secrets.AZURE_FILE_SHARE_ROOT }}
+          STORAGE_ACCOUNT_NAME: ${{ secrets.STORAGE_ACCOUNT_NAME }}
+          CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_SHA: ${{ github.sha }}
           GITHUB_REF_NAME: ${{ github.ref_name }}
@@ -33,7 +35,7 @@ jobs:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          envs: VM_HOST, VM_USER, VM_KEY, GEMINI_API_KEY, GEMINI_MODEL, SLACK_WEBHOOK_URL, COSMOS_ENDPOINT, COSMOS_KEY, COSMOS_DATABASE, COSMOS_CONTAINER, AZURE_STORAGE_CONNECTION_STRING, AZURE_FILE_SHARE_NAME, AZURE_FILE_SHARE_ROOT, GITHUB_RUN_ID, GITHUB_SHA, GITHUB_REF_NAME
+          envs: VM_HOST, VM_USER, VM_KEY, GEMINI_API_KEY, GEMINI_MODEL, SLACK_WEBHOOK_URL, COSMOS_ENDPOINT, COSMOS_KEY, COSMOS_DATABASE, COSMOS_CONTAINER, AZURE_STORAGE_CONNECTION_STRING, AZURE_FILE_SHARE_NAME, AZURE_FILE_SHARE_ROOT, STORAGE_ACCOUNT_NAME, CONTAINER_NAME, GITHUB_RUN_ID, GITHUB_SHA, GITHUB_REF_NAME
           debug: false
           script: |
             set -euo pipefail
@@ -53,6 +55,8 @@ jobs:
             cat > .env << EOF
             GEMINI_API_KEY=${GEMINI_API_KEY}
             GEMINI_MODEL=${GEMINI_MODEL}
+            STORAGE_ACCOUNT_NAME=${STORAGE_ACCOUNT_NAME}
+            CONTAINER_NAME=${CONTAINER_NAME}
             EOF
             chmod 600 .env
             rm -rf venv
@@ -83,6 +87,7 @@ jobs:
             export PROJECT_NAME="robot-framework-project"
             python3 scripts/publish_test_summary.py /tmp/allure_summary.json
             python3 scripts/upload_allure_artifacts.py playwright/allure-results "${REPORT_PATH}" playwright/videos
+            python3 scripts/upload_blob_artifacts.py playwright/allure-report/data/suites.json
 
       - name: Notify Slack with Allure report URL
         if: always()
