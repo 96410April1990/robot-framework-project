@@ -80,3 +80,4 @@ pikepdf
 langgraph
 langchain
 langchain-google-genai
+azure-identity
