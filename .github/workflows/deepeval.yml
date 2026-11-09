@@ -1,0 +1,27 @@
+name: DeepEval Regression Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -U deepeval python-dotenv google-genai pytest
+
+      - name: Run DeepEval
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        run: |
+          deepeval test run test_rag_pipeline.py
