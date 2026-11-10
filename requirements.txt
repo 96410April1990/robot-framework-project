@@ -76,8 +76,12 @@ pytest-html
 allure-pytest
 pytest-xdist
 google-generativeai
+google-genai
 pikepdf
 langgraph
 langchain
 langchain-google-genai
 azure-identity
+sentence-transformers
+scikit-learn
+deepeval
