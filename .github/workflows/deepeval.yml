@@ -25,3 +25,4 @@ jobs:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
         run: |
           deepeval test run deepeval-learning/test_rag_pipeline.py
+          
